@@ -20,7 +20,7 @@ export const OutputSection = () => {
                     </div>
                 </div>
             </div>
-            <div className="w-full flex-grow px-2 py-4">
+            <div className="w-full flex-grow px-2 py-4 ">
                 <Console />
             </div>
         </div>

@@ -1,7 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { filesAtom, fileType, selectedFileIdAtom } from "../store/atoms/atoms";
-import { useUpdateSelectedFile } from "../hooks/hooks";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+    fileChangedAtom,
+    filesAtom,
+    fileType,
+    selectedFileIdAtom,
+} from "../store/atoms/atoms";
+import { useIsMount, useUpdateSelectedFile } from "../hooks/hooks";
 
 export const CodeEditor = () => {
     const editorDivRef = useRef(null);
@@ -12,15 +17,20 @@ export const CodeEditor = () => {
     const selectedFileId = useRecoilValue(selectedFileIdAtom);
 
     const [code, setCode] = useState("");
+    const setFileChanged = useSetRecoilState(fileChangedAtom);
 
+    const isInit = useIsMount();
     useEffect(() => {
+        if (isInit) return;
+
+        setFileChanged(true);
         const selectedFile = files.find(
             (file: fileType) => file.id == selectedFileId
         );
 
         if (editorDivRef.current) {
             const editorDiv = editorDivRef.current as HTMLDivElement;
-            editorDiv.innerHTML = highlightWords(selectedFile?.code || "");
+            editorDiv.innerHTML = highlightSyntax(selectedFile?.code || "");
         }
 
         if (editorRef.current) {
@@ -30,7 +40,10 @@ export const CodeEditor = () => {
         setCode(selectedFile?.code || "");
     }, [selectedFileId]);
 
-    useUpdateSelectedFile({ code: code });
+    useUpdateSelectedFile({
+        id: selectedFileId,
+        code: code,
+    });
 
     const handleTab = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === "Tab") {
@@ -50,7 +63,7 @@ export const CodeEditor = () => {
             if (editorDivRef.current) {
                 const editorDiv = editorDivRef.current as HTMLDivElement;
                 editorDiv.innerHTML =
-                    highlightWords(textarea.value) + "</br></br>";
+                    highlightSyntax(textarea.value) + "</br></br>";
             }
 
             requestAnimationFrame(() => {
@@ -84,7 +97,7 @@ export const CodeEditor = () => {
         }
     };
 
-    const highlightWords = (text: string) => {
+    const highlightSyntax = (text: string) => {
         const keywords = [
             "let",
             "dbg",
@@ -144,7 +157,7 @@ export const CodeEditor = () => {
                                 className="w-full h-full p-3 font-semibold outline-none text-transparent bg-transparent caret-white font-mono leading-7 overflow-auto scrollbar scrollbar-track-transparent scrollbar-thumb-secondary-light resize-none whitespace-nowrap"
                                 onKeyDown={handleTab}
                                 spellCheck={false}
-                                disabled={selectedFileId == "-1"}
+                                disabled={selectedFileId == -1}
                                 onChange={(
                                     e: React.ChangeEvent<HTMLTextAreaElement>
                                 ) => {
@@ -153,7 +166,7 @@ export const CodeEditor = () => {
                                         const editorDiv =
                                             editorDivRef.current as HTMLDivElement;
                                         editorDiv.innerHTML =
-                                            highlightWords(e.target.value) +
+                                            highlightSyntax(e.target.value) +
                                             "<br></br>";
                                     }
                                 }}

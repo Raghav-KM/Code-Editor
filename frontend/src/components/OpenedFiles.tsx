@@ -1,19 +1,20 @@
 import { useRecoilState } from "recoil";
 import { CodeIcon } from "../assets/icons/CodeIcon";
 import { CrossIcon } from "../assets/icons/CrossIcon";
-import { selectedFileIdAtom } from "../store/atoms/atoms";
+import { filesAtom, fileType, selectedFileIdAtom } from "../store/atoms/atoms";
 
 export const OpenedFiles = ({
     id,
     fileName,
     saved,
 }: {
-    id: string;
+    id: number;
     fileName: string;
     saved: boolean;
 }) => {
     const [selectedFileId, setSelectedFileId] =
         useRecoilState(selectedFileIdAtom);
+    const [files, setFiles] = useRecoilState(filesAtom);
 
     return (
         <div
@@ -37,7 +38,15 @@ export const OpenedFiles = ({
                         {`${fileName}${!saved ? "*" : ""}`}
                     </div>
                 </div>
-                <div className="w-1/6 flex justify-center hover:bg-primary rounded-lg py-1">
+                <div
+                    className="w-1/6 flex justify-center hover:bg-primary rounded-lg py-1"
+                    onClick={() => {
+                        setFiles(
+                            files.filter((file: fileType) => file.id != id)
+                        );
+                        setSelectedFileId(-1);
+                    }}
+                >
                     <CrossIcon />
                 </div>
             </div>

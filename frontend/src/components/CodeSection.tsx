@@ -3,16 +3,46 @@ import { ReloadIcon } from "../assets/icons/ReloadIcon";
 import { ShareIcon } from "../assets/icons/ShareIcon";
 import { OpenedFiles } from "../components/OpenedFiles";
 import { CodeEditor } from "./CodeEditor";
-import { useRecoilValue } from "recoil";
-import { filesAtom, fileType } from "../store/atoms/atoms";
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
+import {
+    awaitingCodeResponseAtom,
+    codeResponseAtom,
+    filesAtom,
+    fileType,
+} from "../store/atoms/atoms";
+import { PlusIcon } from "../assets/icons/PlusIcon";
+import { LoadingButton } from "./LoadingButton";
 
 export const CodeSection = () => {
-    const files = useRecoilValue<fileType[]>(filesAtom);
-    
+    const [files, setFiles] = useRecoilState<fileType[]>(filesAtom);
+    const setCodeResponse = useSetRecoilState(codeResponseAtom);
+
+    const [loading, setLoading] = useRecoilState(awaitingCodeResponseAtom);
+
+    const onAddFile = () => {
+        setFiles([
+            ...files,
+            {
+                id: files.length + 1,
+                code: "",
+                fileName: "codeE.js",
+                saved: false,
+            },
+        ]);
+    };
+
+    const onRunCode = () => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+            setCodeResponse("This is the code response.........");
+        }, 2000);
+    };
+
     return (
         <div className="w-full h-full bg-secondary-light flex flex-col p-1">
             <div className="w-full h-[7vh] px-0.5 cursor-pointer">
-                <div className="w-full h-full bg-primary flex flex-row">
+                <div className="w-full h-full bg-primary flex flex-row ">
                     {files.map((file: fileType) => (
                         <OpenedFiles
                             id={file.id}
@@ -22,6 +52,12 @@ export const CodeSection = () => {
                         />
                     ))}
                     <div className="h-full flex-grow border-b-4 border-secondary-light"></div>
+                    <div
+                        className="w-16 p-2 h-full border-s-4 border-b-4 border-secondary-light flex items-center justify-center hover:bg-secondary-light"
+                        onClick={onAddFile}
+                    >
+                        <PlusIcon />
+                    </div>
                 </div>
             </div>
             <div className="w-full h-[85vh] flex-grow px-0.5 overflow-hidden">
@@ -42,12 +78,8 @@ export const CodeSection = () => {
                             <ReloadIcon />
                         </div>
                     </div>
-                    <div>
-                        <button className="px-6 py-3 h-fit bg-accent-primary rounded-xl  text-white flex flex-row gap-2 items-center">
-                            <div className="text-md font-semibold font-mono">
-                                Run
-                            </div>
-                        </button>
+                    <div className="flex flex-row gap-2">
+                        <LoadingButton loading={loading} onClick={onRunCode} />
                     </div>
                 </div>
             </div>
