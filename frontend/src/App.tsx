@@ -1,9 +1,13 @@
+import { RecoilRoot } from "recoil";
 import "./App.css";
+import { FrontPage } from "./pages/FrontPage";
 
 function App() {
     return (
         <>
-            <div className="w-full h-96 bg-black"> Hello World</div>
+            <RecoilRoot>
+                <FrontPage />
+            </RecoilRoot>
         </>
     );
 }
