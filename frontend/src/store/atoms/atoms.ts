@@ -7,9 +7,31 @@ export type FileType = {
     code: string;
 };
 
+export type CodeResponseType = {
+    response_id: string;
+    file_id: string;
+    status: "Success" | "Error" | "";
+    stderr: string;
+    stdout: string;
+};
+
 export const FilesAtom = atom<FileType[]>({
     key: "FilesAtom",
-    default: [],
+    default: [
+        {
+            id: "xxxx-xxxx-xxxx-xxxx",
+            code: `for(let i:int=0;i<N;i=i+1){
+	dbg i;
+	dbg ':';
+	for(let j:int = 0;j<N;j=j+1){
+		dbg j;
+	}
+	dbg endl;
+}`,
+            saved: true,
+            fileName: "TestFile.js",
+        },
+    ],
 });
 
 export const SelectedFileIdAtom = atom<string>({
@@ -22,7 +44,13 @@ export const AwaitingCodeResponseAtom = atom<boolean>({
     default: false,
 });
 
-export const CodeResponseAtom = atom({
+export const CodeResponseAtom = atom<CodeResponseType>({
     key: "CodeResponseAtom",
-    default: "",
+    default: {
+        response_id: "",
+        file_id: "",
+        status: "",
+        stderr: "",
+        stdout: "",
+    },
 });

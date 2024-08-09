@@ -88,7 +88,41 @@ export const CodeEditor = () => {
     };
 
     const highlightSyntax = (code: string) => {
-        return `<span style="color:red;">${code}</span></br></br>`;
+        const keywords = [
+            "let",
+            "dbg",
+            "function",
+            "for",
+            "else",
+            "int",
+            "char",
+            "if",
+            "call",
+            "endl"
+        ];
+        const operators = ["+", "-", "*", "/", "=", "!", "<", ">"];
+
+        const regex = new RegExp(
+            `\\b(${keywords.join("|")})\\b|[${operators
+                .map((op) => "\\" + op)
+                .join("")}]|\\b\\d+\\b`,
+            "g"
+        );
+
+        code = code.replace(regex, (matched) => {
+            if (keywords.includes(matched)) {
+                if (["int", "char","endl"].includes(matched)) {
+                    return `<span style="color:#4daed3;">${matched}</span>`;
+                } else {
+                    return `<span style="color:#cb5567;">${matched}</span>`;
+                }
+            } else if (operators.includes(matched)) {
+                return `<span style="color:#cb5567;">${matched}</span>`;
+            } else {
+                return `<span style="color:#4daed3;">${matched}</span>`;
+            }
+        });
+        return code;
     };
 
     const handelSyncScroll = (e: React.UIEvent<HTMLTextAreaElement>) => {

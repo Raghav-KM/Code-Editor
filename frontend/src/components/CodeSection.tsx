@@ -1,25 +1,35 @@
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { CodeEditor } from "./CodeEditor";
 import { OpenedFiles } from "./OpenedFiles";
 import { RunButton } from "./RunButton";
 import {
     AwaitingCodeResponseAtom,
     CodeResponseAtom,
+    SelectedFileIdAtom,
 } from "../store/atoms/atoms";
 
 export const CodeSection = () => {
     const [loading, setLoading] = useRecoilState(AwaitingCodeResponseAtom);
+    const selectedFileId = useRecoilValue(SelectedFileIdAtom);
 
     const setCodeResponse = useSetRecoilState(CodeResponseAtom);
 
     const onClickRun = () => {
         setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-            setCodeResponse(
-                "Template Code Response... Template Code Response... Template Code Response..."
-            );
-        }, 4000);
+        setTimeout(
+            ({ id }: { id: string }) => {
+                setLoading(false);
+                setCodeResponse({
+                    response_id: "",
+                    file_id: id,
+                    status: "Error",
+                    stderr: "Code Error.... Code Error.... Code Error.... Code Error.... Code Error....",
+                    stdout: "Code Output.... Code Output.... Code Output.... Code Output.... Code Output....",
+                });
+            },
+            4000,
+            { id: selectedFileId }
+        );
     };
 
     return (
@@ -31,7 +41,11 @@ export const CodeSection = () => {
                 <CodeEditor />
             </div>
             <div className="w-full h-16 border border-black">
-                <div className="w-full h-full flex justify-end items-center p-2">
+                <div
+                    className={`w-full h-full flex justify-end items-center p-2 ${
+                        selectedFileId == "" ? "hidden" : ""
+                    }`}
+                >
                     <RunButton onClick={onClickRun} loading={loading} />
                 </div>
             </div>
