@@ -16,3 +16,13 @@ export const SelectedFileIdAtom = atom<string>({
     key: "SelectedFileAtom",
     default: "",
 });
+
+export const AwaitingCodeResponseAtom = atom<boolean>({
+    key: "AwaitingCodeResponseAtom",
+    default: false,
+});
+
+export const CodeResponseAtom = atom({
+    key: "CodeResponseAtom",
+    default: "",
+});

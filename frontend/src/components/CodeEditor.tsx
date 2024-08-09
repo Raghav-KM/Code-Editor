@@ -159,6 +159,7 @@ export const CodeEditor = () => {
                                     onScroll={handelSyncScroll}
                                     ref={editorRef}
                                     spellCheck={false}
+                                    disabled={selectedFileId == ""}
                                 ></textarea>
                             </div>
                         </div>
