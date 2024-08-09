@@ -12,6 +12,7 @@
   "dependencies": {
     "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.4.20",
+    "axios": "^1.7.3",
     "loaders.css": "^0.1.2",
     "postcss": "^8.4.41",
     "react": "^18.3.1",
