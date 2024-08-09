@@ -10,13 +10,14 @@ export const OpenedFiles = () => {
     const [files, setFiles] = useRecoilState(FilesAtom);
 
     const onAddFile = () => {
+        const id = uuid();
         setFiles([
             ...files,
             {
-                id: uuid(),
+                id: id,
                 fileName: "untitiled",
-                saved: false,
-                code: "",
+                saved: true,
+                code: `File [${id}] Selected`,
             },
         ]);
     };
@@ -29,6 +30,7 @@ export const OpenedFiles = () => {
                         <OpenedFile
                             id={file.id}
                             fileName={file.fileName}
+                            saved={file.saved}
                             key={file.id}
                         />
                     );
@@ -45,7 +47,15 @@ export const OpenedFiles = () => {
     );
 };
 
-const OpenedFile = ({ id, fileName }: { id: string; fileName: string }) => {
+const OpenedFile = ({
+    id,
+    fileName,
+    saved,
+}: {
+    id: string;
+    fileName: string;
+    saved: boolean;
+}) => {
     const setFiles = useSetRecoilState(FilesAtom);
     const [selectedFileId, setSelectedFileId] =
         useRecoilState(SelectedFileIdAtom);
@@ -83,6 +93,13 @@ const OpenedFile = ({ id, fileName }: { id: string; fileName: string }) => {
 
     const handlOnDoubleClick = () => {
         setEditable(true);
+        if (inputFileNameRef.current) {
+            const input = inputFileNameRef.current as HTMLInputElement;
+            input.value = fileName;
+            setTimeout(() => {
+                input.focus();
+            }, 0);
+        }
     };
 
     const [editable, setEditable] = useState(false);
@@ -94,32 +111,37 @@ const OpenedFile = ({ id, fileName }: { id: string; fileName: string }) => {
                 selectedFileId == id ? "bg-gray-100" : ""
             }`}
         >
-            <div className="w-5/6 h-full flex justify-center items-center">
-                <div
-                    className="flex items-center justify-center gap-2"
-                    onClick={() => {
-                        setSelectedFileId(id);
-                    }}
-                >
+            <div
+                className="w-5/6 h-full flex justify-center items-center"
+                onClick={() => {
+                    setSelectedFileId(id);
+                }}
+            >
+                <div className="flex items-center justify-center gap-2">
                     <DocumentIcon className="size-5 mb-1" />
-                    {editable ? (
-                        <div className="border w-4/5  px-1 ">
-                            <input
-                                type="text"
-                                className="w-full p-0.5 outline-none font-mono text-md font-medium"
-                                ref={inputFileNameRef}
-                                onKeyDown={handleOnKeyDown}
-                                onBlur={handleOnBlur}
-                            ></input>
-                        </div>
-                    ) : (
-                        <span
-                            className="font-mono text-md font-medium"
-                            onDoubleClick={handlOnDoubleClick}
-                        >
-                            {fileName}
-                        </span>
-                    )}
+
+                    <div
+                        className={`border w-4/5  px-1 ${
+                            !editable ? "hidden" : ""
+                        }`}
+                    >
+                        <input
+                            type="text"
+                            className="w-full p-0.5 outline-none font-mono text-md font-medium"
+                            ref={inputFileNameRef}
+                            onKeyDown={handleOnKeyDown}
+                            onBlur={handleOnBlur}
+                        ></input>
+                    </div>
+
+                    <span
+                        className={`font-mono text-md font-medium ${
+                            editable ? "hidden" : ""
+                        }`}
+                        onDoubleClick={handlOnDoubleClick}
+                    >
+                        {`${fileName}${saved ? "" : "*"}`}
+                    </span>
                 </div>
             </div>
             <div className="w-1/6 flex items-center">
