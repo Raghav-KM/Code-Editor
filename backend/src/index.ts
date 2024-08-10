@@ -3,6 +3,8 @@ import zod from "zod";
 import cors from "cors";
 import { exec } from "child_process";
 import { v4 as uuidv4 } from "uuid";
+import fs from "fs/promises";
+import path from "path";
 
 const app = express();
 app.use(cors());
@@ -12,6 +14,7 @@ type STATUS = "Success" | "Error" | "Pending";
 
 type RESULT = {
     file_id: string;
+    error: string;
     stderr: string;
     stdout: string;
 };
@@ -25,7 +28,7 @@ const generate_uuid = (): string => {
     return uuidv4();
 };
 
-app.post("/api/execute", (req, res) => {
+app.post("/api/execute", async (req, res) => {
     const result = zod
         .object({
             file_id: zod.string(),
@@ -43,28 +46,44 @@ app.post("/api/execute", (req, res) => {
     const code_id = uuidv4();
     execution_status_map.set(code_id, "Pending");
 
-    exec("./cpp-program/program", (error, stdout, stderr) => {
-        if (error) {
-            execution_status_map.set(code_id, "Error");
-            execution_result_map.set(code_id, {
-                file_id: req.body.file_id,
-                stderr: stderr,
-                stdout: stdout,
-            });
-        } else {
-            execution_status_map.set(code_id, "Success");
-            execution_result_map.set(code_id, {
-                file_id: req.body.file_id,
-                stderr: stderr,
-                stdout: stdout,
-            });
-        }
-    });
+    try {
+        console.log(__dirname);
+        await fs.writeFile(
+            path.join(`${__dirname}/../input-code`, `${code_id}.dc`),
+            req.body.code
+        );
 
-    res.json({
-        message: "Executing Code....",
-        code_id: code_id,
-    });
+        exec(
+            `./cpp-program/program ${__dirname}/../input-code/${code_id}.dc`,
+            (error, stdout, stderr) => {
+                if (error) {
+                    execution_status_map.set(code_id, "Error");
+                    execution_result_map.set(code_id, {
+                        file_id: req.body.file_id,
+                        error: error.message,
+                        stderr: stderr,
+                        stdout: stdout,
+                    });
+                } else {
+                    execution_status_map.set(code_id, "Success");
+                    execution_result_map.set(code_id, {
+                        file_id: req.body.file_id,
+                        error: "",
+                        stderr: stderr,
+                        stdout: stdout,
+                    });
+                }
+            }
+        );
+
+        res.json({
+            message: "Executing Code....",
+            code_id: code_id,
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send("ERR! : Unable to execute code");
+    }
 });
 
 app.post("/api/check", (req, res) => {

@@ -11,6 +11,7 @@ export type CodeResponseType = {
     response_id: string;
     file_id: string;
     status: "Success" | "Error" | "";
+    error: string;
     stderr: string;
     stdout: string;
 };
@@ -50,6 +51,7 @@ export const CodeResponseAtom = atom<CodeResponseType>({
         response_id: "",
         file_id: "",
         status: "",
+        error: "",
         stderr: "",
         stdout: "",
     },

@@ -16,10 +16,13 @@ export const Console = () => {
             ) : (
                 <>
                     <div className="w-full flex-grow">
-                        <div className="h-fit text-md font-mono font-bold pb-2">
+                        <div className="h-fit text-md font-mono font-bold pb-2 whitespace-pre">
                             {codeResponse.stdout}
                         </div>
-                        <div className="h-fit text-md font-mono font-bold text-red-500">
+                        <div className="h-fit text-md font-mono font-bold text-red-500 whitespace-pre">
+                            {codeResponse.error}
+                        </div>
+                        <div className="h-fit text-md font-mono font-bold text-red-500 whitespace-pre">
                             {codeResponse.stderr}
                         </div>
                     </div>

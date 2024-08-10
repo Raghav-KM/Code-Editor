@@ -42,7 +42,7 @@ export const CodeEditor = () => {
         if (debounceTimer.current) {
             clearTimeout(debounceTimer.current);
         }
-        debounceTimer.current = setTimeout(updateFile, 2000, {
+        debounceTimer.current = setTimeout(updateFile, 500, {
             id: selectedFileId,
             code: e.target.value,
         });
@@ -98,7 +98,7 @@ export const CodeEditor = () => {
             "char",
             "if",
             "call",
-            "endl"
+            "endl",
         ];
         const operators = ["+", "-", "*", "/", "=", "!", "<", ">"];
 
@@ -111,7 +111,7 @@ export const CodeEditor = () => {
 
         code = code.replace(regex, (matched) => {
             if (keywords.includes(matched)) {
-                if (["int", "char","endl"].includes(matched)) {
+                if (["int", "char", "endl"].includes(matched)) {
                     return `<span style="color:#4daed3;">${matched}</span>`;
                 } else {
                     return `<span style="color:#cb5567;">${matched}</span>`;
