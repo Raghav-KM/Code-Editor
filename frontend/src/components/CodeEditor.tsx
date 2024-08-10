@@ -122,7 +122,7 @@ export const CodeEditor = () => {
                 return `<span style="color:#4daed3;">${matched}</span>`;
             }
         });
-        return code;
+        return code + "</br></br>";
     };
 
     const handelSyncScroll = (e: React.UIEvent<HTMLTextAreaElement>) => {
@@ -139,6 +139,7 @@ export const CodeEditor = () => {
 
         if (lineCounterRef.current) {
             const element = lineCounterRef.current as HTMLTextAreaElement;
+            element.innerHTML += "</br></br>";
             element.scrollTo({
                 behavior: "auto",
                 top: editor.scrollTop,
@@ -173,21 +174,21 @@ export const CodeEditor = () => {
 
     return (
         <>
-            <div className="w-full h-full pt-2">
+            <div className="w-full h-full p-2">
                 <div className="w-full h-full flex flex-row">
                     <div
-                        className="w-[24px] max-h-[320px] pt-3 font-mono leading-7 text-sm font-semibold text-black opacity-50 whitespace-break-spaces text-end overflow-hidden"
+                        className="w-[2%] pt-3 font-mono leading-7 text-sm font-semibold text-black opacity-50 whitespace-break-spaces text-end overflow-hidden"
                         ref={lineCounterRef}
                     ></div>
-                    <div className="w-[96%] max-h-[320px] h-full ps-2 ">
+                    <div className="w-[98%] ps-2 ">
                         <div className="w-full h-full relative">
                             <div
-                                className="w-full h-full text-black font-semibold font-mono p-3 whitespace-pre leading-7 overflow-hidden text-lg"
+                                className="w-full h-full text-black font-semibold font-mono p-3 whitespace-pre leading-7 text-lg overflow-hidden "
                                 ref={editorDivRef}
                             ></div>
-                            <div className="w-full h-full absolute inset-0 ">
+                            <div className="w-full h-full absolute inset-0">
                                 <textarea
-                                    className="w-full h-full text-transparent font-semibold font-mono p-3 caret-black leading-7 text-md outline-none bg-transparent text-lg resize-none scrollbar scrollbar-thumb-gray-300 scrollbar-track-transparent"
+                                    className="w-full h-full text-transparent whitespace-nowrap font-semibold font-mono p-3 caret-black leading-7 text-md outline-none bg-transparent text-lg overflow-auto scrollbar scrollbar-thumb-gray-300 scrollbar-track-transparent"
                                     onChange={handleOnChange}
                                     onKeyDown={handleOnKeyDown}
                                     onScroll={handelSyncScroll}

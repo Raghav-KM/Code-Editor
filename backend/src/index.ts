@@ -47,14 +47,13 @@ app.post("/api/execute", async (req, res) => {
     execution_status_map.set(code_id, "Pending");
 
     try {
-        console.log(__dirname);
         await fs.writeFile(
             path.join(`${__dirname}/../input-code`, `${code_id}.dc`),
             req.body.code
         );
 
         exec(
-            `./cpp-program/program ${__dirname}/../input-code/${code_id}.dc`,
+            `./cpp-program/program ./input-code/${code_id}.dc ./asm-code/${code_id}.asm -pl -pp -pc`,
             (error, stdout, stderr) => {
                 if (error) {
                     execution_status_map.set(code_id, "Error");

@@ -71,17 +71,17 @@ export const CodeSection = () => {
         return () => {
             if (polling_id) clearInterval(polling_id);
         };
-    }, [loading,code_id]);
+    }, [loading, code_id]);
 
     return (
         <div className="w-full h-full border-4 border-black p-2 flex flex-col gap-2">
-            <div className="w-full h-16 border border-black">
+            <div className="w-full min-h-16 border border-black">
                 <OpenedFiles />
             </div>
-            <div className="w-full flex-grow border border-black">
+            <div className="w-full h-[81.5vh] max-h-[81.5vh] border border-black">
                 <CodeEditor />
             </div>
-            <div className="w-full h-16 border border-black">
+            <div className="w-full min-h-16 border border-black">
                 <div
                     className={`w-full h-full flex justify-end items-center p-2 ${
                         selectedFileId == "" ? "hidden" : ""

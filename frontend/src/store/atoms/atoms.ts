@@ -21,7 +21,8 @@ export const FilesAtom = atom<FileType[]>({
     default: [
         {
             id: "xxxx-xxxx-xxxx-xxxx",
-            code: `for(let i:int=0;i<N;i=i+1){
+            code: `let N:int = 5;
+    for(let i:int=0;i<N;i=i+1){
 	dbg i;
 	dbg ':';
 	for(let j:int = 0;j<N;j=j+1){
