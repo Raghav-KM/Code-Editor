@@ -53,7 +53,7 @@ app.post("/api/execute", async (req, res) => {
         );
 
         exec(
-            `./cpp-program/program ./input-code/${code_id}.dc ./asm-code/${code_id}.asm -pl -pp -pc`,
+            `./cpp-program/program ./input-code/${code_id}.dc ./asm-code/${code_id}.asm -pl -pp -pc -pa`,
             (error, stdout, stderr) => {
                 if (error) {
                     execution_status_map.set(code_id, "Error");
