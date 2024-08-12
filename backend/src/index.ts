@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-type STATUS = "Success" | "Error" | "Pending";
+type STATUS = "Success" | "Executing" | "Error" | "Pending";
 
 type RESULT = {
     file_id: string;
@@ -43,17 +43,17 @@ app.post("/api/execute", async (req, res) => {
         return;
     }
 
-    const code_id = uuidv4();
+    const code_id = generate_uuid();
     execution_status_map.set(code_id, "Pending");
 
     try {
         await fs.writeFile(
-            path.join(`${__dirname}/../input-code`, `${code_id}.dc`),
+            path.join(`./input-code`, `${code_id}.dc`),
             req.body.code
         );
 
         exec(
-            `./cpp-program/program ./input-code/${code_id}.dc ./asm-code/${code_id}.asm -pl -pp -pc -pa`,
+            `./cpp-program/program ./input-code/${code_id}.dc ./asm-code/${code_id}.asm -c`,
             (error, stdout, stderr) => {
                 if (error) {
                     execution_status_map.set(code_id, "Error");
@@ -64,13 +64,30 @@ app.post("/api/execute", async (req, res) => {
                         stdout: stdout,
                     });
                 } else {
-                    execution_status_map.set(code_id, "Success");
-                    execution_result_map.set(code_id, {
-                        file_id: req.body.file_id,
-                        error: "",
-                        stderr: stderr,
-                        stdout: stdout,
-                    });
+                    execution_status_map.set(code_id, "Executing");
+
+                    exec(
+                        `nasm -f elf -o ./asm-code/${code_id}.o ./asm-code/${code_id}.asm; ld -m elf_i386 -o ./asm-code/${code_id} ./asm-code/${code_id}.o; ./asm-code/${code_id}`,
+                        (error, stdout, stderr) => {
+                            if (error) {
+                                execution_status_map.set(code_id, "Error");
+                                execution_result_map.set(code_id, {
+                                    file_id: req.body.file_id,
+                                    error: error.message,
+                                    stderr: stderr,
+                                    stdout: stdout,
+                                });
+                            } else {
+                                execution_status_map.set(code_id, "Success");
+                                execution_result_map.set(code_id, {
+                                    file_id: req.body.file_id,
+                                    error: "",
+                                    stderr: stderr,
+                                    stdout: stdout,
+                                });
+                            }
+                        }
+                    );
                 }
             }
         );
@@ -103,6 +120,10 @@ app.post("/api/check", (req, res) => {
     const execution_status = execution_status_map.get(code_id);
     if (execution_status) {
         if (execution_status == "Pending") {
+            res.json({
+                status: "PENDING",
+            });
+        } else if (execution_status == "Executing") {
             res.json({
                 status: "PENDING",
             });
