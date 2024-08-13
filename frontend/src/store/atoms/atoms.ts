@@ -8,12 +8,19 @@ export type FileType = {
 };
 
 export type CodeResponseType = {
-    response_id: string;
     file_id: string;
-    status: "Success" | "Error" | "";
-    error: string;
-    stderr: string;
-    stdout: string;
+    code_id: string;
+    status: string;
+    compiler: {
+        error?: string;
+        stderr: string;
+        stdout: string;
+    };
+    executable: {
+        error?: string;
+        stderr: string;
+        stdout: string;
+    };
 };
 
 export const FilesAtom = atom<FileType[]>({
@@ -21,14 +28,22 @@ export const FilesAtom = atom<FileType[]>({
     default: [
         {
             id: "xxxx-xxxx-xxxx-xxxx",
-            code: `let N:int = 5;
+            code: `function print_alpha(){
+	for(let i:int = 0;i<26;i=i+1){
+		let c:char = 'a'+i;
+		dbg c;
+		dbg ' ';
+	}
+}
+let N:int = 10;
 for(let i:int=0;i<N;i=i+1){
 	dbg i;
 	dbg ':';
-	for(let j:int = 0;j<N;j=j+1){
-		dbg j;
+	dbg ' ';
+	call print_alpha();
+	if(i!=N-1){
+ 		dbg endl;
 	}
-	dbg endl;
 }`,
             saved: true,
             fileName: "TestFile.js",
@@ -49,11 +64,18 @@ export const AwaitingCodeResponseAtom = atom<boolean>({
 export const CodeResponseAtom = atom<CodeResponseType>({
     key: "CodeResponseAtom",
     default: {
-        response_id: "",
         file_id: "",
+        code_id: "",
         status: "",
-        error: "",
-        stderr: "",
-        stdout: "",
+        compiler: {
+            error: "",
+            stderr: "",
+            stdout: "",
+        },
+        executable: {
+            error: "",
+            stderr: "",
+            stdout: "",
+        },
     },
 });

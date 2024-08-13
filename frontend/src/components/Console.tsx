@@ -17,10 +17,14 @@ export const Console = () => {
                 <>
                     <div className="w-full flex-grow">
                         <div className="h-fit text-md font-mono font-bold pb-2 whitespace-pre">
-                            {codeResponse.stdout}
+                            {codeResponse.status == "Success"
+                                ? codeResponse.executable.stdout
+                                : ""}
                         </div>
                         <div className="h-fit text-md font-mono font-bold text-red-500 whitespace-pre">
-                            {codeResponse.stderr}
+                            {codeResponse.status == "Compiler-Error"
+                                ? codeResponse.compiler.stderr
+                                : codeResponse.executable.stderr}
                         </div>
                     </div>
                 </>
