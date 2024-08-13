@@ -10,13 +10,43 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-type STATUS = "Success" | "Executing" | "Error" | "Pending";
+type STATUS =
+    | "Success"
+    | "Executing"
+    | "Compiler-Error"
+    | "Pending"
+    | "Execution-Error";
 
 type RESULT = {
     file_id: string;
-    error: string;
-    stderr: string;
-    stdout: string;
+    code_id: string;
+    compiler: {
+        error?: string;
+        stderr: string;
+        stdout: string;
+    };
+    executable: {
+        error?: string;
+        stderr: string;
+        stdout: string;
+    };
+};
+
+type CodeResponseType = {
+    file_id: string;
+    code_id: string;
+    status: "Success" | "Compiler-Error" | "Execution-Error";
+    compiler?: {
+        stderr: string;
+        lexer: string;
+        parser: string;
+        icode: string;
+        asm: string;
+    };
+    executable?: {
+        stderr: string;
+        stdout: string;
+    };
 };
 
 const PORT = 3000;
@@ -26,6 +56,71 @@ const execution_result_map: Map<string, RESULT> = new Map();
 
 const generate_uuid = (): string => {
     return uuidv4();
+};
+
+const compile_code = async (code_id: string, file_id: string) => {
+    exec(
+        `./cpp-program/program ./input-code/${code_id}.dc ./asm-code/${code_id}.asm -c -pl -pp -pc`,
+        (error, stdout, stderr) => {
+            if (error) {
+                execution_status_map.set(code_id, "Compiler-Error");
+
+                execution_result_map.set(code_id, {
+                    file_id: file_id,
+                    code_id: code_id,
+                    compiler: {
+                        error: error.message,
+                        stderr: stderr,
+                        stdout: stdout,
+                    },
+                } as RESULT);
+            } else {
+                execution_result_map.set(code_id, {
+                    file_id: file_id,
+                    code_id: code_id,
+                    compiler: {
+                        stderr: stderr,
+                        stdout: stdout,
+                    },
+                } as RESULT);
+                execute_code(code_id, file_id);
+            }
+        }
+    );
+};
+
+const execute_code = async (code_id: string, file_id: string) => {
+    execution_status_map.set(code_id, "Executing");
+    exec(
+        
+        `nasm -f elf -o ./asm-code/${code_id}.o ./asm-code/${code_id}.asm; 
+         ld -m elf_i386 -o ./asm-code/${code_id} ./asm-code/${code_id}.o; ./asm-code/${code_id}; 
+         rm -f ./asm-code/${code_id} ./asm-code/${code_id}.o`,
+
+        (error, stdout, stderr) => {
+            if (error) {
+                execution_status_map.set(code_id, "Execution-Error");
+                execution_result_map.set(code_id, {
+                    file_id: file_id,
+                    code_id: code_id,
+                    executable: {
+                        error: error.message,
+                        stderr: stderr,
+                        stdout: stdout,
+                    },
+                } as RESULT);
+            } else {
+                execution_status_map.set(code_id, "Success");
+                execution_result_map.set(code_id, {
+                    ...execution_result_map.get(code_id),
+                    executable: {
+                        stderr: stderr,
+                        stdout: stdout,
+                    },
+                } as RESULT);
+            }
+        }
+    );
 };
 
 app.post("/api/execute", async (req, res) => {
@@ -52,45 +147,7 @@ app.post("/api/execute", async (req, res) => {
             req.body.code
         );
 
-        exec(
-            `./cpp-program/program ./input-code/${code_id}.dc ./asm-code/${code_id}.asm -c`,
-            (error, stdout, stderr) => {
-                if (error) {
-                    execution_status_map.set(code_id, "Error");
-                    execution_result_map.set(code_id, {
-                        file_id: req.body.file_id,
-                        error: error.message,
-                        stderr: stderr,
-                        stdout: stdout,
-                    });
-                } else {
-                    execution_status_map.set(code_id, "Executing");
-
-                    exec(
-                        `nasm -f elf -o ./asm-code/${code_id}.o ./asm-code/${code_id}.asm; ld -m elf_i386 -o ./asm-code/${code_id} ./asm-code/${code_id}.o; ./asm-code/${code_id}`,
-                        (error, stdout, stderr) => {
-                            if (error) {
-                                execution_status_map.set(code_id, "Error");
-                                execution_result_map.set(code_id, {
-                                    file_id: req.body.file_id,
-                                    error: error.message,
-                                    stderr: stderr,
-                                    stdout: stdout,
-                                });
-                            } else {
-                                execution_status_map.set(code_id, "Success");
-                                execution_result_map.set(code_id, {
-                                    file_id: req.body.file_id,
-                                    error: "",
-                                    stderr: stderr,
-                                    stdout: stdout,
-                                });
-                            }
-                        }
-                    );
-                }
-            }
-        );
+        compile_code(code_id, req.body.file_id);
 
         res.json({
             message: "Executing Code....",
