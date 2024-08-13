@@ -1,4 +1,4 @@
-export const BarsIcon = () => {
+export const BarsIcon = ({ className }: { className: string }) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -6,7 +6,7 @@ export const BarsIcon = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+            className={className}
         >
             <path
                 strokeLinecap="round"

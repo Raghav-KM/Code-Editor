@@ -46,7 +46,7 @@ for(let i:int=0;i<N;i=i+1){
 	}
 }`,
             saved: true,
-            fileName: "TestFile.js",
+            fileName: "TestFile.dc",
         },
     ],
 });
@@ -78,4 +78,9 @@ export const CodeResponseAtom = atom<CodeResponseType>({
             stdout: "",
         },
     },
+});
+
+export const CollapseSidebarAtom = atom({
+    key: "CollapseSidebarAtom",
+    default: true,
 });

@@ -2,6 +2,44 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { FilesAtom, FileType, SelectedFileIdAtom } from "../store/atoms/atoms";
 import { ChangeEvent, useEffect, useRef } from "react";
 
+export const highlightSyntax = (code: string): string => {
+    const keywords = [
+        "let",
+        "dbg",
+        "function",
+        "for",
+        "else",
+        "int",
+        "char",
+        "if",
+        "call",
+        "endl",
+    ];
+    const operators = ["+", "-", "*", "/", "=", "!", "<", ">"];
+
+    const regex = new RegExp(
+        `\\b(${keywords.join("|")})\\b|[${operators
+            .map((op) => "\\" + op)
+            .join("")}]|\\b\\d+\\b`,
+        "g"
+    );
+
+    code = code.replace(regex, (matched) => {
+        if (keywords.includes(matched)) {
+            if (["int", "char", "endl"].includes(matched)) {
+                return `<span style="color:#4daed3;">${matched}</span>`;
+            } else {
+                return `<span style="color:#cb5567;">${matched}</span>`;
+            }
+        } else if (operators.includes(matched)) {
+            return `<span style="color:#cb5567;">${matched}</span>`;
+        } else {
+            return `<span style="color:#4daed3;">${matched}</span>`;
+        }
+    });
+    return code + "</br></br>";
+};
+
 export const CodeEditor = () => {
     const editorDivRef = useRef(null);
     const editorRef = useRef(null);
@@ -18,6 +56,9 @@ export const CodeEditor = () => {
         if (selectedFile) {
             updateEditor(selectedFile.code);
             updateEditorDiv(selectedFile.code);
+        } else {
+            updateEditor("");
+            updateEditorDiv("");
         }
         return () => {
             if (selectedFile) {
@@ -85,44 +126,6 @@ export const CodeEditor = () => {
                 textarea.selectionStart = textarea.selectionEnd = start + 1;
             });
         }
-    };
-
-    const highlightSyntax = (code: string) => {
-        const keywords = [
-            "let",
-            "dbg",
-            "function",
-            "for",
-            "else",
-            "int",
-            "char",
-            "if",
-            "call",
-            "endl",
-        ];
-        const operators = ["+", "-", "*", "/", "=", "!", "<", ">"];
-
-        const regex = new RegExp(
-            `\\b(${keywords.join("|")})\\b|[${operators
-                .map((op) => "\\" + op)
-                .join("")}]|\\b\\d+\\b`,
-            "g"
-        );
-
-        code = code.replace(regex, (matched) => {
-            if (keywords.includes(matched)) {
-                if (["int", "char", "endl"].includes(matched)) {
-                    return `<span style="color:#4daed3;">${matched}</span>`;
-                } else {
-                    return `<span style="color:#cb5567;">${matched}</span>`;
-                }
-            } else if (operators.includes(matched)) {
-                return `<span style="color:#cb5567;">${matched}</span>`;
-            } else {
-                return `<span style="color:#4daed3;">${matched}</span>`;
-            }
-        });
-        return code + "</br></br>";
     };
 
     const handelSyncScroll = (e: React.UIEvent<HTMLTextAreaElement>) => {

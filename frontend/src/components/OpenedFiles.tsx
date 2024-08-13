@@ -17,13 +17,13 @@ export const OpenedFiles = () => {
                 id: id,
                 fileName: "untitiled",
                 saved: true,
-                code: `File [${id}] Selected`,
+                code: ``,
             },
         ]);
     };
 
     return (
-        <div className="w-full h-full border border-black flex flex-row justify-between">
+        <div className="w-full h-full  flex flex-row justify-between">
             <div className="flex-grow h-full flex flex-row overflow-x-auto scrollbar-none">
                 {files.map((file: FileType) => {
                     return (
@@ -61,6 +61,9 @@ const OpenedFile = ({
         useRecoilState(SelectedFileIdAtom);
 
     const onRemoveFile = () => {
+        if (selectedFileId == id) {
+            setSelectedFileId("");
+        }
         setFiles((files: FileType[]) =>
             files.filter((file: FileType) => file.id != id)
         );

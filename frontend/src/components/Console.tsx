@@ -10,7 +10,7 @@ export const Console = () => {
     const codeResponse = useRecoilValue(CodeResponseAtom);
 
     return (
-        <div className="w-full h-full border border-black pt-5 pb-1 px-3 flex flex-col overflow-auto scrollbar scrollbar-thumb-gray-300 scrollbar-track-transparent ">
+        <div className="w-full h-full border border-black pt-4 pb-1 px-3 flex flex-col overflow-auto scrollbar scrollbar-thumb-gray-300 scrollbar-track-transparent ">
             {loading ? (
                 <ConsoleLoading />
             ) : (
