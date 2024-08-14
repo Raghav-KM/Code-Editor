@@ -69,3 +69,5 @@ This project is a code editor built using React.js for the frontend and Express.
 3. Open your browser and navigate to `http://localhost:3000`.
 
 ## Screenshots
+
+![alt text](<Screenshot from 2024-08-14 18-33-20.png>)
