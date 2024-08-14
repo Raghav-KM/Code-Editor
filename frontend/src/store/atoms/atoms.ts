@@ -89,3 +89,8 @@ export const OutputOptionSelectionAtom = atom({
     key: "OutputOptionSelectionAtom",
     default: 2,
 });
+
+export const ClearCodeAtom = atom({
+    key: "ClearCodeAtom",
+    default: 1,
+});

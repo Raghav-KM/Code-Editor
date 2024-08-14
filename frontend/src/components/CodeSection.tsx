@@ -4,6 +4,7 @@ import { OpenedFiles } from "./OpenedFiles";
 import { RunButton } from "./RunButton";
 import {
     AwaitingCodeResponseAtom,
+    ClearCodeAtom,
     CodeResponseAtom,
     CodeResponseType,
     FilesAtom,
@@ -12,6 +13,8 @@ import {
 } from "../store/atoms/atoms";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { CopyIcon } from "../assets/icons/CopyIcon";
+import { ReloadIcon } from "../assets/icons/ReloadIcon";
 
 const BACKEND_URL = "http://localhost:3000";
 
@@ -19,9 +22,10 @@ export const CodeSection = () => {
     const [loading, setLoading] = useRecoilState(AwaitingCodeResponseAtom);
     const [code_id, setCodeId] = useState("");
 
-    const files = useRecoilValue(FilesAtom);
+    const [files, setFiles] = useRecoilState(FilesAtom);
     const selectedFileId = useRecoilValue(SelectedFileIdAtom);
 
+    const setClearCode = useSetRecoilState(ClearCodeAtom);
     const setCodeResponse = useSetRecoilState(CodeResponseAtom);
 
     const onClickRun = async () => {
@@ -73,6 +77,24 @@ export const CodeSection = () => {
         };
     }, [loading, code_id]);
 
+    const onReload = () => {
+        setFiles(
+            files.map((file: FileType) =>
+                file.id == selectedFileId
+                    ? { ...file, code: "", saved: false }
+                    : file
+            )
+        );
+        setClearCode((c) => c + 1);
+    };
+    const onCopy = () => {
+        const selectedFile = files.filter(
+            (file: FileType) => file.id == selectedFileId
+        );
+        navigator.clipboard.writeText(selectedFile[0].code);
+        
+    };
+
     return (
         <div className="w-full h-full bg-primary flex flex-col border-x-4 border-secondary-light">
             <div className="w-full min-h-[7vh]">
@@ -87,7 +109,25 @@ export const CodeSection = () => {
                         selectedFileId == "" ? "hidden" : ""
                     }`}
                 >
-                    <RunButton onClick={onClickRun} loading={loading} />
+                    <div className="w-full h-full flex flex-row items-center justify-between px-4">
+                        <div className="h-fit flex flex-row">
+                            <div onClick={onCopy} title="Copy to Clipboard">
+                                <CopyIcon
+                                    className={
+                                        "size-12 text-white cursor-pointer hover:bg-secondary-light p-3 rounded"
+                                    }
+                                />
+                            </div>
+                            <div onClick={onReload} title="Clear Code">
+                                <ReloadIcon
+                                    className={
+                                        "size-12 text-white cursor-pointer hover:bg-secondary-light p-3 rounded"
+                                    }
+                                />
+                            </div>
+                        </div>
+                        <RunButton onClick={onClickRun} loading={loading} />
+                    </div>
                 </div>
             </div>
         </div>

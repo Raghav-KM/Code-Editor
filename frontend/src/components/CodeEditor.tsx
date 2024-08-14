@@ -1,5 +1,10 @@
 import { useRecoilState, useRecoilValue } from "recoil";
-import { FilesAtom, FileType, SelectedFileIdAtom } from "../store/atoms/atoms";
+import {
+    ClearCodeAtom,
+    FilesAtom,
+    FileType,
+    SelectedFileIdAtom,
+} from "../store/atoms/atoms";
 import { ChangeEvent, useEffect, useRef } from "react";
 
 export const highlightSyntax = (code: string): string => {
@@ -49,6 +54,8 @@ export const CodeEditor = () => {
     const selectedFileId = useRecoilValue(SelectedFileIdAtom);
     const [files, setFiles] = useRecoilState(FilesAtom);
 
+    const clearCode = useRecoilValue(ClearCodeAtom);
+
     useEffect(() => {
         const selectedFile = files.find(
             (file: FileType) => file.id == selectedFileId
@@ -76,6 +83,19 @@ export const CodeEditor = () => {
             }
         };
     }, [selectedFileId]);
+
+    useEffect(() => {
+        const selectedFile = files.find(
+            (file: FileType) => file.id == selectedFileId
+        );
+        if (selectedFile) {
+            updateEditor(selectedFile.code);
+            updateEditorDiv(selectedFile.code);
+        } else {
+            updateEditor("");
+            updateEditorDiv("");
+        }
+    }, [clearCode]);
 
     const handleOnChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         updateEditorDiv(e.target.value);
