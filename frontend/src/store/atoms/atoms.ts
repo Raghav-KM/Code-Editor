@@ -84,3 +84,8 @@ export const CollapseSidebarAtom = atom({
     key: "CollapseSidebarAtom",
     default: true,
 });
+
+export const OutputOptionSelectionAtom = atom({
+    key: "OutputOptionSelectionAtom",
+    default: 2,
+});
