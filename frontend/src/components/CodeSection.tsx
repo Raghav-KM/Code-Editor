@@ -16,7 +16,7 @@ import axios from "axios";
 import { CopyIcon } from "../assets/icons/CopyIcon";
 import { ReloadIcon } from "../assets/icons/ReloadIcon";
 
-const BACKEND_URL = "http://localhost:3000";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL as String;
 
 export const CodeSection = () => {
     const [loading, setLoading] = useRecoilState(AwaitingCodeResponseAtom);
@@ -92,7 +92,6 @@ export const CodeSection = () => {
             (file: FileType) => file.id == selectedFileId
         );
         navigator.clipboard.writeText(selectedFile[0].code);
-        
     };
 
     return (
