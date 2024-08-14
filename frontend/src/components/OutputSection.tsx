@@ -8,14 +8,14 @@ import { CompileOptions } from "./CompileOptions";
 export const OutputSection = () => {
     const optionSelection = useRecoilValue(OutputOptionSelectionAtom);
     return (
-        <div className="w-full h-full border-4 border-black p-2 flex flex-col gap-2">
-            <div className="w-full min-h-16 border border-black">
+        <div className="w-full h-full bg-primary px-2 flex flex-col">
+            <div className="w-full min-h-[7vh]">
                 <OutputOptions />
             </div>
-            <div className="w-full flex-grow h-[81.5vh] max-h-[81.5vh] border ">
+            <div className="w-full flex-grow h-[85vh] max-h-[85vh] px-2">
                 {optionSelection == 1 ? <CompileOptions /> : <Console />}
             </div>
-            <div className="w-full min-h-16">
+            <div className="w-full min-h-[8vh]">
                 <ExecutionStatus />
             </div>
         </div>

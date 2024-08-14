@@ -1,4 +1,4 @@
-export const ConsoleIcon = () => {
+export const ConsoleIcon = ({ className }: { className: string }) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -6,7 +6,7 @@ export const ConsoleIcon = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6 text-white"
+            className={className}
         >
             <path
                 strokeLinecap="round"

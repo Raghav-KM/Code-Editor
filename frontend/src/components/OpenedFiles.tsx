@@ -35,13 +35,13 @@ export const OpenedFiles = () => {
                         />
                     );
                 })}
+                <div className="flex-grow h-full border-b-4 border-secondary-light"></div>
             </div>
-
             <div
-                className="w-16 h-full border-s border-black flex justify-center items-center hover:bg-gray-100 cursor-pointer"
+                className="w-16 h-full border-s-4 border-b-4 border-secondary-light flex justify-center items-center hover:bg-secondary-light cursor-pointer"
                 onClick={onAddFile}
             >
-                <PlusIcon className="size-6" />
+                <PlusIcon className="size-6 text-white" />
             </div>
         </div>
     );
@@ -110,8 +110,8 @@ const OpenedFile = ({
 
     return (
         <div
-            className={`w-48 max-w-48 h-full border-r  border-black flex p-1 hover:bg-gray-50 cursor-pointer ${
-                selectedFileId == id ? "bg-gray-100" : ""
+            className={`w-56 max-w-56 h-full border-b-4 border-secondary-light flex p-1 hover:bg-secondary-light cursor-pointer ${
+                selectedFileId == id ? "border-accent-primary" : ""
             }`}
         >
             <div
@@ -121,7 +121,7 @@ const OpenedFile = ({
                 }}
             >
                 <div className="flex items-center justify-center gap-2">
-                    <DocumentIcon className="size-5 mb-1" />
+                    <DocumentIcon className="size-5 mb-1 text-white" />
 
                     <div
                         className={`border w-4/5  px-1 ${
@@ -130,15 +130,16 @@ const OpenedFile = ({
                     >
                         <input
                             type="text"
-                            className="w-full p-0.5 outline-none font-mono text-md font-medium"
+                            className="w-full p-0.5 outline-none font-mono text-md font-medium bg-secondary-light text-white"
                             ref={inputFileNameRef}
                             onKeyDown={handleOnKeyDown}
                             onBlur={handleOnBlur}
+                            spellCheck={false}
                         ></input>
                     </div>
 
                     <span
-                        className={`font-mono text-md font-medium ${
+                        className={`font-mono text-md font-semibold text-white ${
                             editable ? "hidden" : ""
                         }`}
                         onDoubleClick={handlOnDoubleClick}
@@ -149,10 +150,10 @@ const OpenedFile = ({
             </div>
             <div className="w-1/6 flex items-center">
                 <div
-                    className="hover:bg-gray-100 rounded-lg p-1"
+                    className="hover:bg-secondary rounded-lg p-1"
                     onClick={onRemoveFile}
                 >
-                    <CrossIcon className="size-5" />
+                    <CrossIcon className="size-5 text-white" />
                 </div>
             </div>
         </div>

@@ -9,7 +9,7 @@ export const RunButton = ({
 }) => {
     return (
         <button
-            className={`w-20 h-12 px-4 py-1 border border-black font-mono rounded-lg hover:bg-gray-100 flex justify-center items-center`}
+            className={`w-20 h-12 px-4 py-1 text-white font-semibold bg-accent-primary font-mono rounded-lg hover:opacity-85 flex justify-center items-center`}
             onClick={onClick}
             disabled={loading}
         >

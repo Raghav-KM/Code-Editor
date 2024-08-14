@@ -9,7 +9,7 @@ export const Sidebar = () => {
         useRecoilState(CollapseSidebarAtom);
 
     return (
-        <div className="bg-white w-full h-full border-[3px] border-black flex flex-col justify-between gap-2 pt-2">
+        <div className="bg-primary w-full h-full flex flex-col justify-between gap-2 pt-2">
             <div
                 className={`w-full h-16 flex items-center justify-end p-2`}
                 onClick={() => {
@@ -19,13 +19,13 @@ export const Sidebar = () => {
                 {isSidebarCollapsed ? (
                     <BarsIcon
                         className={
-                            "size-10 hover:bg-gray-100 hover:cursor-pointer p-1 rounded-lg"
+                            "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 me-2 rounded-lg text-white"
                         }
                     />
                 ) : (
                     <ChevronLeftIcons
                         className={
-                            "size-10 hover:bg-gray-100 hover:cursor-pointer p-1 rounded-lg "
+                            "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
                         }
                     />
                 )}
@@ -33,7 +33,7 @@ export const Sidebar = () => {
             {isSidebarCollapsed ? (
                 ""
             ) : (
-                <div className=" w-full flex-grow max-h-[96vh] flex flex-col gap-3 overflow-auto scrollbar scrollbar-thumb-gray-300 scrollbar-track-transparent p-2">
+                <div className=" w-full flex-grow max-h-[96vh] flex flex-col gap-3 overflow-auto scrollbar scrollbar-thumb-gray-300 scrollbar-track-transparent p-2 px-4">
                     <CodeSnippets code={`let i:int = 10;\nlet j:char = 'a';`} />
                     <CodeSnippets
                         code={`dbg i;\ndbg 1;\ndbg 'a';\ndbg i+1*2`}

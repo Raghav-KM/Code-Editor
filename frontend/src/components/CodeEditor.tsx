@@ -180,18 +180,18 @@ export const CodeEditor = () => {
             <div className="w-full h-full p-2">
                 <div className="w-full h-full flex flex-row">
                     <div
-                        className="w-[2%] pt-3 font-mono leading-7 text-sm font-semibold text-black opacity-50 whitespace-break-spaces text-end overflow-hidden"
+                        className="w-[2%] pt-3 font-mono leading-7 text-sm font-semibold text-white opacity-80 whitespace-break-spaces text-end overflow-hidden"
                         ref={lineCounterRef}
                     ></div>
                     <div className="w-[98%] ps-2 ">
                         <div className="w-full h-full relative">
                             <div
-                                className="w-full h-full text-black font-semibold font-mono p-3 whitespace-pre leading-7 text-lg overflow-hidden "
+                                className="w-full h-full text-white font-semibold font-mono p-3 whitespace-pre leading-7 text-md overflow-hidden "
                                 ref={editorDivRef}
                             ></div>
                             <div className="w-full h-full absolute inset-0">
                                 <textarea
-                                    className="w-full h-full text-transparent whitespace-nowrap font-semibold font-mono p-3 caret-black leading-7 text-md outline-none bg-transparent text-lg overflow-auto scrollbar scrollbar-thumb-gray-300 scrollbar-track-transparent"
+                                    className="w-full h-full text-transparent whitespace-nowrap font-semibold font-mono p-3 caret-white leading-7 text-md outline-none bg-transparent overflow-auto scrollbar scrollbar-thumb-gray-300 scrollbar-track-transparent resize-none"
                                     onChange={handleOnChange}
                                     onKeyDown={handleOnKeyDown}
                                     onScroll={handelSyncScroll}

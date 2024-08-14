@@ -74,14 +74,14 @@ export const CodeSection = () => {
     }, [loading, code_id]);
 
     return (
-        <div className="w-full h-full border-4 border-black p-2 flex flex-col gap-2">
-            <div className="w-full min-h-16 border border-black">
+        <div className="w-full h-full bg-primary flex flex-col border-x-4 border-secondary-light">
+            <div className="w-full min-h-[7vh]">
                 <OpenedFiles />
             </div>
-            <div className="w-full h-[81.5vh] max-h-[81.5vh] border border-black">
+            <div className="w-full h-[85vh] max-h-[85vh] border-b-4 border-secondary-light bg-secondary">
                 <CodeEditor />
             </div>
-            <div className="w-full min-h-16 border border-black">
+            <div className="w-full min-h-[8vh] bg-secondary ">
                 <div
                     className={`w-full h-full flex justify-end items-center p-2 ${
                         selectedFileId == "" ? "hidden" : ""
