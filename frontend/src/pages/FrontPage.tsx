@@ -10,7 +10,7 @@ export const FrontPage = () => {
         <>
             <div className="w-full h-lvh flex">
                 <div
-                    className={`h-lvhtransition-all ease-out duration-300 ${
+                    className={`max-h-[100vh] px-2 transition-all ease-out duration-300 bg-primary ${
                         isSidebarCollapsed ? "w-[4vw]" : "w-[20vw]"
                     }`}
                 >

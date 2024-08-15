@@ -34,7 +34,7 @@ export const Sidebar = () => {
             {isSidebarCollapsed ? (
                 ""
             ) : (
-                <div className="w-full flex-grow flex flex-col gap-4">
+                <div className="w-full flex-grow flex flex-col gap-4 overflow-y-auto scrollbar scrollbar-thumb-secondary-light scrollbar-track-transparent">
                     <div className="px-4 p-2">
                         <LoginSection />
                     </div>

@@ -34,10 +34,13 @@ export const CodeSection = () => {
                 (file: FileType) => file.id == selectedFileId
             );
 
-            const response = await axios.post(`${BACKEND_URL}/api/execute`, {
-                file_id: selectedFileId,
-                code: selectedFile[0].code,
-            });
+            const response = await axios.post(
+                `${BACKEND_URL}/api/code/execute`,
+                {
+                    file_id: selectedFileId,
+                    code: selectedFile[0].code,
+                }
+            );
 
             console.log(response.data);
             setCodeId(response.data.code_id);
@@ -55,7 +58,7 @@ export const CodeSection = () => {
             polling_id = setInterval(async () => {
                 try {
                     const response = await axios.post(
-                        `${BACKEND_URL}/api/check`,
+                        `${BACKEND_URL}/api/code/check`,
                         {
                             code_id: code_id,
                         }

@@ -6,7 +6,7 @@ import { ChevronDownIcon } from "../assets/icons/ChevronDownIcon";
 export const SnippetsSection = () => {
     const [collapsed, setCollapsed] = useState(true);
     return (
-        <div className=" w-full h-full flex flex-col gap-3">
+        <div className="bg-primary w-full h-full flex flex-col gap-3">
             <div
                 className="w-full min-w-[20vh] flex flex-row justify-between items-center overflow-x-clip text-white font-mono font-bold text-xl p-4 px-6 bg-secondary-light rounded-lg cursor-pointer hover:opacity-85"
                 onClick={() => {
@@ -23,7 +23,7 @@ export const SnippetsSection = () => {
             {collapsed ? (
                 ""
             ) : (
-                <div className="w-full flex-grow flex max-h-[60vh] flex-col gap-3 overflow-x-hidden overflow-y-auto scrollbar scrollbar-thumb-secondary-light scrollbar-track-transparent px-2">
+                <div className="w-full flex-grow flex h-fit flex-col gap-3 overflow-x-hidden overflow-y-auto scrollbar scrollbar-thumb-secondary-light scrollbar-track-transparent px-2">
                     <CodeSnippets code={`let i:int = 10;\nlet j:char = 'a';`} />
                     <CodeSnippets
                         code={`dbg i;\ndbg 1;\ndbg 'a';\ndbg i+1*2`}
