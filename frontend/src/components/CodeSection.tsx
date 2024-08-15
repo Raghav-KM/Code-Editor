@@ -1,7 +1,7 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { CodeEditor } from "./CodeEditor";
 import { OpenedFiles } from "./OpenedFiles";
-import { RunButton } from "./RunButton";
+import { LoaderButton } from "./LoaderButton";
 import {
     AwaitingCodeResponseAtom,
     ClearCodeAtom,
@@ -125,7 +125,11 @@ export const CodeSection = () => {
                                 />
                             </div>
                         </div>
-                        <RunButton onClick={onClickRun} loading={loading} />
+                        <LoaderButton
+                            onClick={onClickRun}
+                            loading={loading}
+                            label={"Run"}
+                        />
                     </div>
                 </div>
             </div>

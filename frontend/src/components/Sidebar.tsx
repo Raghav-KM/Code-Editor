@@ -2,7 +2,8 @@ import { useRecoilState } from "recoil";
 import { BarsIcon } from "../assets/icons/BarsIcon";
 import { CollapseSidebarAtom } from "../store/atoms/atoms";
 import { ChevronLeftIcons } from "../assets/icons/ChevronLeftIcon";
-import { CodeSnippets } from "./CodeSnippets";
+import { SnippetsSection } from "./SnippetsSection";
+import { LoginSection } from "./LoginSection";
 
 export const Sidebar = () => {
     const [isSidebarCollapsed, setCollapseSidebar] =
@@ -33,23 +34,13 @@ export const Sidebar = () => {
             {isSidebarCollapsed ? (
                 ""
             ) : (
-                <div className=" w-full flex-grow max-h-[96vh] flex flex-col gap-3 overflow-auto scrollbar scrollbar-thumb-gray-300 scrollbar-track-transparent p-2 px-4">
-                    <CodeSnippets code={`let i:int = 10;\nlet j:char = 'a';`} />
-                    <CodeSnippets
-                        code={`dbg i;\ndbg 1;\ndbg 'a';\ndbg i+1*2`}
-                    />
-                    <CodeSnippets code={`i = j;\ni = j+(1*2-3);`} />
-                    <CodeSnippets
-                        code={`if (condition) {\n\t.\n\t.\n} else {\n\t.\n\t.\n}`}
-                    />
-                    <CodeSnippets
-                        code={`for(let i:int=0; i<N; i=i+1){\n\t.\n\t.\n}`}
-                    />
-
-                    <CodeSnippets
-                        code={`function function_name(){\n\t.\n\t.\n}`}
-                    />
-                    <CodeSnippets code={`call function_name();`} />
+                <div className="w-full flex-grow flex flex-col gap-4">
+                    <div className="px-4 p-2">
+                        <LoginSection />
+                    </div>
+                    <div className="px-4 p-2">
+                        <SnippetsSection />
+                    </div>
                 </div>
             )}
         </div>

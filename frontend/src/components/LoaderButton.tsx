@@ -1,20 +1,26 @@
 import { MouseEventHandler } from "react";
 
-export const RunButton = ({
+export const LoaderButton = ({
     onClick,
     loading,
+    label,
+    width,
 }: {
     onClick: MouseEventHandler;
     loading: boolean;
+    label: string;
+    width?: string;
 }) => {
     return (
         <button
-            className={`w-20 h-12 px-4 py-1 text-white font-semibold bg-accent-primary font-mono rounded-lg hover:opacity-85 flex justify-center items-center`}
+            className={`${
+                width ? width : "w-20"
+            } h-12 px-4 py-1 text-white font-semibold bg-accent-primary font-mono rounded-lg hover:opacity-85 flex justify-center items-center`}
             onClick={onClick}
             disabled={loading}
         >
             {!loading ? (
-                "Run"
+                `${label}`
             ) : (
                 <svg
                     width="22"
