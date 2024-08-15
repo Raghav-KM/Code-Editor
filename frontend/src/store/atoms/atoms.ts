@@ -94,3 +94,12 @@ export const ClearCodeAtom = atom({
     key: "ClearCodeAtom",
     default: 1,
 });
+
+export const UserAtom = atom({
+    key: "userAtom",
+    default: {
+        userName: "",
+        userId: "",
+        token: "",
+    },
+});

@@ -2,9 +2,47 @@ import { useState } from "react";
 import { ChevronDownIcon } from "../assets/icons/ChevronDownIcon";
 import { ChevronUpIcon } from "../assets/icons/ChevronUpIcon";
 import { LoaderButton } from "./LoaderButton";
+import axios from "axios";
+import { BACKEND_URL } from "./CodeSection";
+import { useRecoilState } from "recoil";
+import { UserAtom } from "../store/atoms/atoms";
 
 export const LoginSection = () => {
     const [collapsed, setCollapsed] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [user, setUser] = useRecoilState(UserAtom);
+
+    const [credentials, setCredentials] = useState<{
+        userName: string;
+        password: string;
+    }>({
+        userName: "",
+        password: "",
+    });
+
+    const onLogin = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.post(
+                `${BACKEND_URL}/api/user/signin`,
+                {
+                    ...credentials,
+                }
+            );
+            setUser({
+                userName: response.data.userName,
+                userId: response.data.userId,
+                token: response.data.token,
+            });
+            console.log(user);
+            alert("Login Successfull");
+        } catch (ex) {
+            console.log(ex);
+            alert("Login Failed!!");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className=" w-full h-full flex flex-col gap-3">
@@ -26,27 +64,39 @@ export const LoginSection = () => {
             ) : (
                 <div className="w-full flex-grow flex max-h-[60vh] flex-col gap-4 overflow-x-hidden overflow-y-auto scrollbar scrollbar-thumb-secondary-light scrollbar-track-transparent px-4">
                     <div className="flex flex-row gap-2 items-center justify-around">
-                        <div className="w-20 text-white font-semibold text-md ">
+                        <div className="min-w-20 text-white font-semibold text-md ">
                             UserName
                         </div>
                         <input
                             type="text"
                             className="p-2 bg-secondary-light text-white font-mono font-semibold outline-none"
+                            onChange={(e) => {
+                                setCredentials({
+                                    ...credentials,
+                                    userName: e.target.value,
+                                });
+                            }}
                         ></input>
                     </div>
                     <div className="flex flex-row gap-2 items-center justify-around">
-                        <div className="w-20 text-white font-semibold text-md ">
+                        <div className="min-w-20 text-white font-semibold text-md ">
                             Password
                         </div>
                         <input
                             type="password"
                             className="p-2 bg-secondary-light text-white font-mono font-semibold outline-none"
+                            onChange={(e) => {
+                                setCredentials({
+                                    ...credentials,
+                                    password: e.target.value,
+                                });
+                            }}
                         ></input>
                     </div>
                     <div className="w-full flex">
                         <LoaderButton
-                            onClick={() => {}}
-                            loading={false}
+                            onClick={onLogin}
+                            loading={loading}
                             label={"Login"}
                             width={"w-full"}
                         />
