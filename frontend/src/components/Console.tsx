@@ -8,6 +8,7 @@ import { ConsoleLoading } from "./ConsoleLoading";
 export const Console = () => {
     const loading = useRecoilValue(AwaitingCodeResponseAtom);
     const codeResponse = useRecoilValue(CodeResponseAtom);
+    
 
     return (
         <div className="w-full h-full text-white pt-4 pb-1 px-3 flex flex-col overflow-auto scrollbar scrollbar-thumb-gray-300 scrollbar-track-transparent ">

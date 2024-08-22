@@ -2,9 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import express from "express";
 import zod from "zod";
 import jwt from "jsonwebtoken";
-import { authMiddleware } from "../middlewares/auth";
-
-const JWT_SECRET = "secret_key";
+import { authMiddleware, JWT_SECRET } from "../middlewares/auth";
 
 export const router = express.Router();
 const prisma = new PrismaClient();
@@ -110,8 +108,22 @@ router.post("/signin", async (req, res) => {
     }
 });
 
-router.get("/me", authMiddleware, (req, res) => {
-    res.json({});
+router.get("/me", authMiddleware, async (req, res) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                userName: req.body.userName,
+            },
+        });
+
+        if (!user) {
+            res.status(401).json({});
+            return;
+        }
+        res.json({});
+    } catch (ex) {
+        res.status(401).json({});
+    }
 });
 
 export default router;

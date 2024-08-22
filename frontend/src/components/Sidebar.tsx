@@ -1,13 +1,17 @@
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { BarsIcon } from "../assets/icons/BarsIcon";
-import { CollapseSidebarAtom } from "../store/atoms/atoms";
+import { CollapseSidebarAtom, UserAtom } from "../store/atoms/atoms";
 import { ChevronLeftIcons } from "../assets/icons/ChevronLeftIcon";
 import { SnippetsSection } from "./SnippetsSection";
 import { LoginSection } from "./LoginSection";
+import { ProfileSection } from "./ProfileSection";
 
 export const Sidebar = () => {
     const [isSidebarCollapsed, setCollapseSidebar] =
         useRecoilState(CollapseSidebarAtom);
+
+    const user = useRecoilValue(UserAtom);
+    const loggedIn: boolean = user.token != "";
 
     return (
         <div className="bg-primary w-full h-full flex flex-col justify-between gap-2 pt-2">
@@ -36,7 +40,7 @@ export const Sidebar = () => {
             ) : (
                 <div className="w-full flex-grow flex flex-col gap-4 overflow-y-auto scrollbar scrollbar-thumb-secondary-light scrollbar-track-transparent">
                     <div className="px-4 p-2">
-                        <LoginSection />
+                        {loggedIn ? <ProfileSection /> : <LoginSection />}
                     </div>
                     <div className="px-4 p-2">
                         <SnippetsSection />

@@ -100,6 +100,7 @@ export const UserAtom = atom({
     default: {
         userName: "",
         userId: "",
+        fullName: "",
         token: "",
     },
 });

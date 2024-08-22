@@ -2,57 +2,28 @@ import { useState } from "react";
 import { ChevronDownIcon } from "../assets/icons/ChevronDownIcon";
 import { ChevronUpIcon } from "../assets/icons/ChevronUpIcon";
 import { LoaderButton } from "./LoaderButton";
-import axios from "axios";
-import { BACKEND_URL } from "./CodeSection";
 import { useRecoilState } from "recoil";
 import { UserAtom } from "../store/atoms/atoms";
-import { jwtDecode } from "jwt-decode";
 
-export const LoginSection = () => {
-    const [collapsed, setCollapsed] = useState(true);
+export const ProfileSection = () => {
+    const [collapsed, setCollapsed] = useState(false);
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useRecoilState(UserAtom);
 
-    const [credentials, setCredentials] = useState<{
-        userName: string;
-        password: string;
-    }>({
-        userName: "",
-        password: "",
-    });
-
-    const onLogin = async () => {
+    const onLogout = () => {
         setLoading(true);
-        try {
-            const response = await axios.post(
-                `${BACKEND_URL}/api/user/signin`,
-                {
-                    ...credentials,
-                }
-            );
-            const decodedToken: {
-                userName: string;
-                userId: string;
-                fullName: string;
-            } = jwtDecode(response.data.token);
 
-            setUser({
-                userName: decodedToken.userName,
-                userId: decodedToken.userId,
-                fullName: decodedToken.fullName,
-                token: response.data.token,
-            });
-
-            localStorage.setItem("jwt-token", response.data.token);
-
-            console.log(user);
-            alert("Login Successfull");
-        } catch (ex) {
-            console.log(ex);
-            alert("Login Failed!!");
-        } finally {
+        setTimeout(() => {
+            alert("Logout Successfull");
             setLoading(false);
-        }
+            setUser({
+                userId: "",
+                userName: "",
+                fullName: "",
+                token: "",
+            });
+            localStorage.removeItem("jwt-token");
+        }, 1000);
     };
 
     return (
@@ -63,7 +34,7 @@ export const LoginSection = () => {
                     setCollapsed((c) => !c);
                 }}
             >
-                Login
+                Profile
                 {collapsed ? (
                     <ChevronDownIcon className="size-7 text-white " />
                 ) : (
@@ -81,34 +52,26 @@ export const LoginSection = () => {
                         <input
                             type="text"
                             className="p-2 bg-secondary-light text-white font-mono font-semibold outline-none"
-                            onChange={(e) => {
-                                setCredentials({
-                                    ...credentials,
-                                    userName: e.target.value,
-                                });
-                            }}
+                            value={user.userName}
+                            disabled={true}
                         ></input>
                     </div>
                     <div className="flex flex-row gap-2 items-center justify-around">
                         <div className="min-w-20 text-white font-semibold text-md ">
-                            Password
+                            Full Name
                         </div>
                         <input
-                            type="password"
+                            type="text"
                             className="p-2 bg-secondary-light text-white font-mono font-semibold outline-none"
-                            onChange={(e) => {
-                                setCredentials({
-                                    ...credentials,
-                                    password: e.target.value,
-                                });
-                            }}
+                            value={user.fullName}
+                            disabled={true}
                         ></input>
                     </div>
                     <div className="w-full flex">
                         <LoaderButton
-                            onClick={onLogin}
+                            onClick={onLogout}
                             loading={loading}
-                            label={"Login"}
+                            label={"Logout"}
                             width={"w-full"}
                         />
                     </div>

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = "secretkey";
+export const JWT_SECRET = "secret_key";
 
 interface DecodedToken {
     userName?: string;
@@ -26,7 +26,7 @@ export const authMiddleware = (
     try {
         const decoded = jwt.verify(token, JWT_SECRET) as DecodedToken;
         if (decoded.userName && decoded.userId && decoded.fullName) {
-            req.body.email = decoded.userName;
+            req.body.userName = decoded.userName;
             req.body.userId = decoded.userId;
             req.body.fullName = decoded.fullName;
 
