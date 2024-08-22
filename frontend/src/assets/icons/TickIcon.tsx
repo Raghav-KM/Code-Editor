@@ -1,12 +1,4 @@
-import { MouseEventHandler } from "react";
-
-export const BarsIcon = ({
-    className,
-    onClick,
-}: {
-    className: string;
-    onClick?: MouseEventHandler;
-}) => {
+export const TickIcon = ({ className }: { className: string }) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -15,12 +7,11 @@ export const BarsIcon = ({
             strokeWidth={1.5}
             stroke="currentColor"
             className={className}
-            onClick={onClick}
         >
             <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
+                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
             />
         </svg>
     );

@@ -1,4 +1,4 @@
-import { atom } from "recoil";
+import { atom, selector } from "recoil";
 
 export type FileType = {
     id: string;
@@ -108,4 +108,18 @@ export const UserAtom = atom({
 export const UserLoggedInAtom = atom({
     key: "UserLoggedInAtom",
     default: false,
+});
+
+export const FilesUploadedSelector = selector({
+    key: "FilesUploadedAtom",
+    get: ({ get }) => {
+        const files = get(FilesAtom);
+        let all_saved = true;
+        files.forEach((file: FileType) => {
+            if (!file.saved) {
+                all_saved = false;
+            }
+        });
+        return all_saved;
+    },
 });

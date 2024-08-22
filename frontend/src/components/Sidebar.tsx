@@ -1,37 +1,99 @@
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { BarsIcon } from "../assets/icons/BarsIcon";
-import { CollapseSidebarAtom, UserLoggedInAtom } from "../store/atoms/atoms";
+import {
+    CollapseSidebarAtom,
+    FilesAtom,
+    FilesUploadedSelector,
+    FileType,
+    UserLoggedInAtom,
+} from "../store/atoms/atoms";
 import { ChevronLeftIcons } from "../assets/icons/ChevronLeftIcon";
 import { SnippetsSection } from "./SnippetsSection";
 import { LoginSection } from "./LoginSection";
 import { ProfileSection } from "./ProfileSection";
+import { Upload } from "../assets/icons/Upload";
+import { useState } from "react";
+import { TickIcon } from "../assets/icons/TickIcon";
+import { CircularLoader } from "../assets/icons/CircularLoader";
 
 export const Sidebar = () => {
     const [isSidebarCollapsed, setCollapseSidebar] =
         useRecoilState(CollapseSidebarAtom);
 
+    const setFiles = useSetRecoilState(FilesAtom);
+
     const loggedIn = useRecoilValue(UserLoggedInAtom);
+    const fileUploaded = useRecoilValue(FilesUploadedSelector);
+    const [uploading, setUploading] = useState(false);
+
+    const uploadFiles = () => {
+        setUploading(true);
+
+        setTimeout(() => {
+            setFiles((files: FileType[]) =>
+                files.map((file: FileType) => {
+                    return {
+                        ...file,
+                        saved: true,
+                    };
+                })
+            );
+            setUploading(false);
+        }, 1500);
+    };
 
     return (
         <div className="bg-primary w-full h-full flex flex-col justify-between gap-2 pt-2">
-            <div
-                className={`w-full h-16 flex items-center justify-end p-2`}
-                onClick={() => {
-                    setCollapseSidebar((s) => !s);
-                }}
-            >
+            <div className={`w-full h-fit flex items-center justify-end p-2`}>
                 {isSidebarCollapsed ? (
-                    <BarsIcon
-                        className={
-                            "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 me-2 rounded-lg text-white"
-                        }
-                    />
+                    <div className="flex flex-col">
+                        <div className="w-fit h-fit">
+                            <BarsIcon
+                                className={
+                                    "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white mb-8"
+                                }
+                                onClick={() => {
+                                    setCollapseSidebar((s) => !s);
+                                }}
+                            />
+                        </div>
+                        {loggedIn ? (
+                            <div>
+                                {!fileUploaded ? (
+                                    uploading ? (
+                                        <CircularLoader className="text-white size-10 p-2" />
+                                    ) : (
+                                        <Upload
+                                            className={
+                                                "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
+                                            }
+                                            onClick={uploadFiles}
+                                        />
+                                    )
+                                ) : (
+                                    <TickIcon
+                                        className={
+                                            "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
+                                        }
+                                    />
+                                )}
+                            </div>
+                        ) : (
+                            ""
+                        )}
+                    </div>
                 ) : (
-                    <ChevronLeftIcons
-                        className={
-                            "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
-                        }
-                    />
+                    <div
+                        onClick={() => {
+                            setCollapseSidebar((s) => !s);
+                        }}
+                    >
+                        <ChevronLeftIcons
+                            className={
+                                "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
+                            }
+                        />
+                    </div>
                 )}
             </div>
             {isSidebarCollapsed ? (

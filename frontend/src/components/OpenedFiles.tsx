@@ -63,6 +63,7 @@ const OpenedFile = ({
 }) => {
     const loggedIn = useRecoilValue(UserLoggedInAtom);
     const setFiles = useSetRecoilState(FilesAtom);
+
     const [selectedFileId, setSelectedFileId] =
         useRecoilState(SelectedFileIdAtom);
 
@@ -84,7 +85,11 @@ const OpenedFile = ({
                         file.id == id
                             ? {
                                   ...file,
-                                  fileName: input.value,
+                                  fileName:
+                                      input.value == ""
+                                          ? "untitiled.dc"
+                                          : input.value,
+                                  saved: false,
                               }
                             : file
                     );
