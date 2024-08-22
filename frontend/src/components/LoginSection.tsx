@@ -4,14 +4,15 @@ import { ChevronUpIcon } from "../assets/icons/ChevronUpIcon";
 import { LoaderButton } from "./LoaderButton";
 import axios from "axios";
 import { BACKEND_URL } from "./CodeSection";
-import { useRecoilState } from "recoil";
-import { UserAtom } from "../store/atoms/atoms";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { UserAtom, UserLoggedInAtom } from "../store/atoms/atoms";
 import { jwtDecode } from "jwt-decode";
 
 export const LoginSection = () => {
     const [collapsed, setCollapsed] = useState(true);
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useRecoilState(UserAtom);
+    const setLoggedIn = useSetRecoilState(UserLoggedInAtom);
 
     const [credentials, setCredentials] = useState<{
         userName: string;
@@ -42,7 +43,7 @@ export const LoginSection = () => {
                 fullName: decodedToken.fullName,
                 token: response.data.token,
             });
-
+            setLoggedIn(true);
             localStorage.setItem("jwt-token", response.data.token);
 
             console.log(user);

@@ -2,13 +2,14 @@ import { useState } from "react";
 import { ChevronDownIcon } from "../assets/icons/ChevronDownIcon";
 import { ChevronUpIcon } from "../assets/icons/ChevronUpIcon";
 import { LoaderButton } from "./LoaderButton";
-import { useRecoilState } from "recoil";
-import { UserAtom } from "../store/atoms/atoms";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { UserAtom, UserLoggedInAtom } from "../store/atoms/atoms";
 
 export const ProfileSection = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useRecoilState(UserAtom);
+    const setLoggedIn = useSetRecoilState(UserLoggedInAtom);
 
     const onLogout = () => {
         setLoading(true);
@@ -23,6 +24,9 @@ export const ProfileSection = () => {
                 token: "",
             });
             localStorage.removeItem("jwt-token");
+            localStorage.removeItem("files");
+
+            setLoggedIn(false);
         }, 1000);
     };
 

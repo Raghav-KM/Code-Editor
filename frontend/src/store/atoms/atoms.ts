@@ -104,3 +104,8 @@ export const UserAtom = atom({
         token: "",
     },
 });
+
+export const UserLoggedInAtom = atom({
+    key: "UserLoggedInAtom",
+    default: false,
+});

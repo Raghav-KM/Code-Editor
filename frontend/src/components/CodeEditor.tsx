@@ -4,6 +4,7 @@ import {
     FilesAtom,
     FileType,
     SelectedFileIdAtom,
+    UserLoggedInAtom,
 } from "../store/atoms/atoms";
 import { ChangeEvent, useEffect, useRef } from "react";
 
@@ -55,6 +56,7 @@ export const CodeEditor = () => {
     const [files, setFiles] = useRecoilState(FilesAtom);
 
     const clearCode = useRecoilValue(ClearCodeAtom);
+    const loggedIn = useRecoilValue(UserLoggedInAtom);
 
     useEffect(() => {
         const selectedFile = files.find(
@@ -112,8 +114,9 @@ export const CodeEditor = () => {
     const updateFile = ({ id, code }: { id: string; code: string }) => {
         const selectedFile = files.find((file: FileType) => file.id == id);
         if (!selectedFile) return;
-        setFiles((files: FileType[]) =>
-            files.map((file: FileType) =>
+
+        setFiles((files: FileType[]) => {
+            const updatedFiles = files.map((file: FileType) =>
                 file.id == selectedFile.id
                     ? {
                           ...file,
@@ -121,8 +124,12 @@ export const CodeEditor = () => {
                           saved: !file.saved ? false : file.code == code,
                       }
                     : file
-            )
-        );
+            );
+            if (loggedIn) {
+                localStorage.setItem("files", JSON.stringify(updatedFiles));
+            }
+            return updatedFiles;
+        });
     };
 
     const handleOnKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

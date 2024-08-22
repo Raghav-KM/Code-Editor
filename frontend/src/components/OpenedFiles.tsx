@@ -1,8 +1,13 @@
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { CrossIcon } from "../assets/icons/CrossIcon";
 import { DocumentIcon } from "../assets/icons/DocumentIcon";
 import { PlusIcon } from "../assets/icons/PlusIcon";
-import { FilesAtom, FileType, SelectedFileIdAtom } from "../store/atoms/atoms";
+import {
+    FilesAtom,
+    FileType,
+    SelectedFileIdAtom,
+    UserLoggedInAtom,
+} from "../store/atoms/atoms";
 import { v4 as uuid } from "uuid";
 import React, { useRef, useState } from "react";
 
@@ -56,6 +61,7 @@ const OpenedFile = ({
     fileName: string;
     saved: boolean;
 }) => {
+    const loggedIn = useRecoilValue(UserLoggedInAtom);
     const setFiles = useSetRecoilState(FilesAtom);
     const [selectedFileId, setSelectedFileId] =
         useRecoilState(SelectedFileIdAtom);
@@ -73,16 +79,23 @@ const OpenedFile = ({
             if (inputFileNameRef.current) {
                 const input = inputFileNameRef.current as HTMLInputElement;
 
-                setFiles((files: FileType[]) =>
-                    files.map((file: FileType) =>
+                setFiles((files: FileType[]) => {
+                    const updatedFiles = files.map((file: FileType) =>
                         file.id == id
                             ? {
                                   ...file,
                                   fileName: input.value,
                               }
                             : file
-                    )
-                );
+                    );
+                    if (loggedIn) {
+                        localStorage.setItem(
+                            "files",
+                            JSON.stringify(updatedFiles)
+                        );
+                    }
+                    return updatedFiles;
+                });
             }
             setEditable(false);
         } else if (e.key == "Escape") {
@@ -110,8 +123,10 @@ const OpenedFile = ({
 
     return (
         <div
-            className={`w-56 max-w-56 h-full border-b-4 border-secondary-light flex p-1 hover:bg-secondary-light cursor-pointer ${
-                selectedFileId == id ? "border-accent-primary" : ""
+            className={`w-56 max-w-56 h-full border-b-4 flex p-1 hover:bg-secondary-light cursor-pointer ${
+                selectedFileId == id
+                    ? "border-accent-primary"
+                    : "border-secondary-light"
             }`}
         >
             <div
