@@ -1,4 +1,12 @@
-export const ChevronLeftIcons = ({ className }: { className: string }) => {
+import { MouseEventHandler } from "react";
+
+export const ChevronLeftIcons = ({
+    className,
+    onClick,
+}: {
+    className: string;
+    onClick: MouseEventHandler;
+}) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -7,6 +15,7 @@ export const ChevronLeftIcons = ({ className }: { className: string }) => {
             strokeWidth={1.5}
             stroke="currentColor"
             className={className}
+            onClick={onClick}
         >
             <path
                 strokeLinecap="round"

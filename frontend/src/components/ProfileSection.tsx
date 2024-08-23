@@ -38,7 +38,9 @@ export const ProfileSection = () => {
                     setCollapsed((c) => !c);
                 }}
             >
-                Profile
+                <div className="flex flex-row justify-start items-center">
+                    Profile
+                </div>
                 {collapsed ? (
                     <ChevronDownIcon className="size-7 text-white " />
                 ) : (

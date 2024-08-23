@@ -23,7 +23,7 @@ export const Sidebar = () => {
     const setFiles = useSetRecoilState(FilesAtom);
 
     const loggedIn = useRecoilValue(UserLoggedInAtom);
-    const fileUploaded = useRecoilValue(FilesUploadedSelector);
+    const filesUploaded = useRecoilValue(FilesUploadedSelector);
     const [uploading, setUploading] = useState(false);
 
     const uploadFiles = () => {
@@ -59,7 +59,7 @@ export const Sidebar = () => {
                         </div>
                         {loggedIn ? (
                             <div>
-                                {!fileUploaded ? (
+                                {!filesUploaded ? (
                                     uploading ? (
                                         <CircularLoader className="text-white size-10 p-2" />
                                     ) : (
@@ -83,15 +83,41 @@ export const Sidebar = () => {
                         )}
                     </div>
                 ) : (
-                    <div
-                        onClick={() => {
-                            setCollapseSidebar((s) => !s);
-                        }}
-                    >
+                    <div className="flex flex-row justify-between w-full">
+                        {!filesUploaded ? (
+                            uploading ? (
+                                <div className="text-white flex flex-row items-center ms-3 font-mono font-bold text-lg gap-2">
+                                    Saving Changes
+                                    <CircularLoader className="text-white size-10 p-2" />
+                                </div>
+                            ) : (
+                                <div className="text-white flex flex-row items-center ms-3 font-mono font-bold text-lg gap-2">
+                                    Save Changes?
+                                    <Upload
+                                        className={
+                                            "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
+                                        }
+                                        onClick={uploadFiles}
+                                    />
+                                </div>
+                            )
+                        ) : (
+                            <div className="text-white flex flex-row items-center ms-3 font-mono font-bold text-lg gap-2">
+                                Files Saved
+                                <TickIcon
+                                    className={
+                                        "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
+                                    }
+                                />
+                            </div>
+                        )}
                         <ChevronLeftIcons
                             className={
                                 "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
                             }
+                            onClick={() => {
+                                setCollapseSidebar((s) => !s);
+                            }}
                         />
                     </div>
                 )}
