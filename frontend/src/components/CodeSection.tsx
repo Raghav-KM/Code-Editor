@@ -11,6 +11,7 @@ import {
     FileType,
     SelectedFileIdAtom,
     UserAtom,
+    UserLoggedInAtom,
 } from "../store/atoms/atoms";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -32,6 +33,8 @@ export const CodeSection = () => {
     const setCodeResponse = useSetRecoilState(CodeResponseAtom);
 
     const user = useRecoilValue(UserAtom);
+
+    const loggedIn = useRecoilValue(UserLoggedInAtom);
 
     const onClickRun = async () => {
         try {
@@ -160,14 +163,18 @@ export const CodeSection = () => {
                                     }
                                 />
                             </div>
-                            <div onClick={onReload} title="Delete File">
-                                <DeleteIcon
-                                    className={
-                                        "size-12 text-white cursor-pointer hover:bg-secondary-light p-3 rounded"
-                                    }
-                                    onClick={onDeleteFile}
-                                />
-                            </div>
+                            {loggedIn ? (
+                                <div onClick={onReload} title="Delete File">
+                                    <DeleteIcon
+                                        className={
+                                            "size-12 text-white cursor-pointer hover:bg-secondary-light p-3 rounded"
+                                        }
+                                        onClick={onDeleteFile}
+                                    />
+                                </div>
+                            ) : (
+                                ""
+                            )}
                         </div>
                         <LoaderButton
                             onClick={onClickRun}

@@ -77,7 +77,9 @@ export const FrontPage = () => {
             <div className="w-full h-lvh flex">
                 <div
                     className={`max-h-[100vh] px-2 transition-all ease-out duration-300 bg-primary ${
-                        isSidebarCollapsed ? "w-[4vw]" : "w-[20vw]"
+                        isSidebarCollapsed
+                            ? "min-w-16 w-[4vw]"
+                            : "min-w-96 w-[20vw]"
                     }`}
                 >
                     <Sidebar />
@@ -86,7 +88,7 @@ export const FrontPage = () => {
                     <div className="w-4/6 max-w-[4/6] h-full">
                         <CodeSection />
                     </div>
-                    <div className="w-2/6 max-w-[2/6] h-full">
+                    <div className="w-2/6 max-w-[2/6] h-full min-w-96">
                         <OutputSection />
                     </div>
                 </div>

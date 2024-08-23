@@ -20,8 +20,8 @@ export const OpenedFiles = () => {
             ...files,
             {
                 id: id,
-                fileName: "untitiled",
-                saved: true,
+                fileName: "untitiled.dc",
+                saved: false,
                 code: ``,
             },
         ]);
@@ -29,7 +29,7 @@ export const OpenedFiles = () => {
 
     return (
         <div className="w-full h-full  flex flex-row justify-between">
-            <div className="flex-grow h-full flex flex-row overflow-x-auto scrollbar-none">
+            <div className=" flex-grow h-full flex flex-row overflow-x-auto scrollbar-none">
                 {files.map((file: FileType) => {
                     return (
                         <OpenedFile
@@ -43,7 +43,7 @@ export const OpenedFiles = () => {
                 <div className="flex-grow h-full border-b-4 border-secondary-light"></div>
             </div>
             <div
-                className="w-16 h-full border-s-4 border-b-4 border-secondary-light flex justify-center items-center hover:bg-secondary-light cursor-pointer"
+                className="min-w-16 h-full border-s-4 border-b-4 border-secondary-light flex justify-center items-center hover:bg-secondary-light cursor-pointer"
                 onClick={onAddFile}
             >
                 <PlusIcon className="size-6 text-white" />
@@ -128,7 +128,7 @@ const OpenedFile = ({
 
     return (
         <div
-            className={`w-56 max-w-56 h-full border-b-4 flex p-1 hover:bg-secondary-light cursor-pointer ${
+            className={`w-56 max-w-56 min-w-56 h-full border-b-4 flex p-1 hover:bg-secondary-light cursor-pointer ${
                 selectedFileId == id
                     ? "border-accent-primary"
                     : "border-secondary-light"

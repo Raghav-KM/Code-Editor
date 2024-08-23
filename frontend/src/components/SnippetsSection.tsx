@@ -8,7 +8,7 @@ export const SnippetsSection = () => {
     return (
         <div className="bg-primary w-full h-full flex flex-col gap-3">
             <div
-                className="w-full min-w-[20vh] flex flex-row justify-between items-center overflow-x-clip text-white font-mono font-bold text-xl p-4 px-6 bg-secondary-light rounded-lg cursor-pointer hover:opacity-85"
+                className="w-full min-w-[20vh] flex flex-row justify-between items-center overflow-x-clip text-white font-mono font-bold text-lg p-4 px-6 bg-secondary-light rounded-lg cursor-pointer hover:opacity-85"
                 onClick={() => {
                     setCollapsed((c) => !c);
                 }}

@@ -60,7 +60,7 @@ export const Sidebar = () => {
             <div className={`w-full h-fit flex items-center justify-end p-2`}>
                 {isSidebarCollapsed ? (
                     <div className="flex flex-col">
-                        <div className="w-fit h-fit">
+                        <div className=" w-fit h-fit">
                             <BarsIcon
                                 className={
                                     "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white mb-8"
