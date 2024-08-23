@@ -2,7 +2,12 @@ import { BACKEND_URL, CodeSection } from "../components/CodeSection";
 import { OutputSection } from "../components/OutputSection";
 import { Sidebar } from "../components/Sidebar";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { CollapseSidebarAtom, FilesAtom, UserAtom } from "../store/atoms/atoms";
+import {
+    CollapseSidebarAtom,
+    FilesAtom,
+    FileType,
+    UserAtom,
+} from "../store/atoms/atoms";
 import { useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -13,8 +18,8 @@ export const FrontPage = () => {
     const setLoggedIn = useSetRecoilState(UserLoggedInAtom);
 
     const setUser = useSetRecoilState(UserAtom);
-
     const setFiles = useSetRecoilState(FilesAtom);
+
     useEffect(() => {
         const token = localStorage.getItem("jwt-token") || "";
         axios
@@ -37,13 +42,29 @@ export const FrontPage = () => {
                     token: token,
                 });
                 setLoggedIn(true);
-                try {
-                    const saved_files = JSON.parse(
-                        localStorage.getItem("files") || ""
-                    );
-                    setFiles(saved_files);
-                    console.log("Files Set");
-                } catch (ex) {}
+
+                axios
+                    .get(`${BACKEND_URL}/api/store/files`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    })
+                    .then((response) => {
+                        const uploadedFiles = response.data.files;
+                        try {
+                            const saved_files = JSON.parse(
+                                localStorage.getItem("files") || ""
+                            );
+                            setFiles(saved_files);
+                        } catch (ex) {
+                            console.log(uploadedFiles);
+                            setFiles(
+                                uploadedFiles.map((file: FileType) => {
+                                    return { ...file, saved: true };
+                                })
+                            );
+                        }
+                    });
             })
             .catch(() => {
                 localStorage.removeItem("jwt-token");

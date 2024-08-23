@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { BarsIcon } from "../assets/icons/BarsIcon";
 import {
     CollapseSidebarAtom,
@@ -15,21 +15,30 @@ import { Upload } from "../assets/icons/Upload";
 import { useState } from "react";
 import { TickIcon } from "../assets/icons/TickIcon";
 import { CircularLoader } from "../assets/icons/CircularLoader";
+import axios from "axios";
+import { BACKEND_URL } from "./CodeSection";
 
 export const Sidebar = () => {
     const [isSidebarCollapsed, setCollapseSidebar] =
         useRecoilState(CollapseSidebarAtom);
 
-    const setFiles = useSetRecoilState(FilesAtom);
+    const [files, setFiles] = useRecoilState(FilesAtom);
 
     const loggedIn = useRecoilValue(UserLoggedInAtom);
     const filesUploaded = useRecoilValue(FilesUploadedSelector);
     const [uploading, setUploading] = useState(false);
 
-    const uploadFiles = () => {
+    const uploadFiles = async () => {
         setUploading(true);
 
-        setTimeout(() => {
+        try {
+            await axios.put(`${BACKEND_URL}/api/store/files`, files, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "jwt-token"
+                    )}`,
+                },
+            });
             setFiles((files: FileType[]) =>
                 files.map((file: FileType) => {
                     return {
@@ -38,8 +47,12 @@ export const Sidebar = () => {
                     };
                 })
             );
+        } catch (ex) {
+            alert("Err!");
+        } finally {
             setUploading(false);
-        }, 1500);
+            localStorage.removeItem("files");
+        }
     };
 
     return (
@@ -84,32 +97,36 @@ export const Sidebar = () => {
                     </div>
                 ) : (
                     <div className="flex flex-row justify-between w-full">
-                        {!filesUploaded ? (
-                            uploading ? (
-                                <div className="text-white flex flex-row items-center ms-3 font-mono font-bold text-lg gap-2">
-                                    Saving Changes
-                                    <CircularLoader className="text-white size-10 p-2" />
-                                </div>
+                        {loggedIn ? (
+                            !filesUploaded ? (
+                                uploading ? (
+                                    <div className="text-white flex flex-row items-center ms-3 font-mono font-bold text-lg gap-2">
+                                        Saving Changes
+                                        <CircularLoader className="text-white size-10 p-2" />
+                                    </div>
+                                ) : (
+                                    <div className="text-white flex flex-row items-center ms-3 font-mono font-bold text-lg gap-2">
+                                        Save Changes?
+                                        <Upload
+                                            className={
+                                                "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
+                                            }
+                                            onClick={uploadFiles}
+                                        />
+                                    </div>
+                                )
                             ) : (
                                 <div className="text-white flex flex-row items-center ms-3 font-mono font-bold text-lg gap-2">
-                                    Save Changes?
-                                    <Upload
+                                    Files Saved
+                                    <TickIcon
                                         className={
                                             "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
                                         }
-                                        onClick={uploadFiles}
                                     />
                                 </div>
                             )
                         ) : (
-                            <div className="text-white flex flex-row items-center ms-3 font-mono font-bold text-lg gap-2">
-                                Files Saved
-                                <TickIcon
-                                    className={
-                                        "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
-                                    }
-                                />
-                            </div>
+                            <div></div>
                         )}
                         <ChevronLeftIcons
                             className={

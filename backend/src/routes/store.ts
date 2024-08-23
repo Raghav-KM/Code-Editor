@@ -16,7 +16,7 @@ router.get("/files", authMiddleware, async (req, res) => {
         });
 
         res.status(200).json({
-            data: files,
+            files: files,
         });
     } catch (ex: any) {
         res.status(500).json({
