@@ -5,7 +5,12 @@ import { LoaderButton } from "./LoaderButton";
 import axios from "axios";
 import { BACKEND_URL } from "./CodeSection";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { UserAtom, UserLoggedInAtom } from "../store/atoms/atoms";
+import {
+    FilesAtom,
+    FileType,
+    UserAtom,
+    UserLoggedInAtom,
+} from "../store/atoms/atoms";
 import { jwtDecode } from "jwt-decode";
 
 export const LoginSection = () => {
@@ -13,6 +18,8 @@ export const LoginSection = () => {
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useRecoilState(UserAtom);
     const setLoggedIn = useSetRecoilState(UserLoggedInAtom);
+
+    const setFiles = useSetRecoilState(FilesAtom);
 
     const [credentials, setCredentials] = useState<{
         userName: string;
@@ -44,8 +51,44 @@ export const LoginSection = () => {
                 token: response.data.token,
             });
             setLoggedIn(true);
+
+            const token = response.data.token;
             localStorage.setItem("jwt-token", response.data.token);
 
+            axios
+                .get(`${BACKEND_URL}/api/store/files`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                .then((response) => {
+                    const uploadedFiles = response.data.files;
+
+                    setFiles((files: FileType[]) => {
+                        let updatedfiles = files;
+                        console.log(uploadedFiles);
+
+                        updatedfiles = updatedfiles.concat(
+                            uploadedFiles
+                                .filter((file: FileType) => {
+                                    if (
+                                        updatedfiles.find(
+                                            (f: FileType) => f.id == file.id
+                                        )
+                                    ) {
+                                        return false;
+                                    } else {
+                                        return true;
+                                    }
+                                })
+                                .map((file: FileType) => {
+                                    return { ...file, saved: true };
+                                })
+                        );
+                        console.log(updatedfiles);
+                        return updatedfiles;
+                    });
+                });
             console.log(user);
             alert("Login Successfull");
         } catch (ex) {

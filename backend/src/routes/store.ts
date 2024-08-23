@@ -8,6 +8,21 @@ export const router = express.Router();
 const prisma = new PrismaClient();
 
 router.get("/file/:id", (req, res) => {});
+router.delete("/file/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        const deletedFile = await prisma.code_file.delete({
+            where: { id: id },
+        });
+        res.status(200).json({
+            message: "File deleted successfully",
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "An error occurred while deleting the file.",
+        });
+    }
+});
 
 router.get("/files", authMiddleware, async (req, res) => {
     try {

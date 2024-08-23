@@ -10,11 +10,13 @@ import {
     FilesAtom,
     FileType,
     SelectedFileIdAtom,
+    UserAtom,
 } from "../store/atoms/atoms";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { CopyIcon } from "../assets/icons/CopyIcon";
 import { ReloadIcon } from "../assets/icons/ReloadIcon";
+import { DeleteIcon } from "../assets/icons/DeleteIcon";
 
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL as String;
 
@@ -23,10 +25,13 @@ export const CodeSection = () => {
     const [code_id, setCodeId] = useState("");
 
     const [files, setFiles] = useRecoilState(FilesAtom);
-    const selectedFileId = useRecoilValue(SelectedFileIdAtom);
+    const [selectedFileId, setSelectedFileId] =
+        useRecoilState(SelectedFileIdAtom);
 
     const setClearCode = useSetRecoilState(ClearCodeAtom);
     const setCodeResponse = useSetRecoilState(CodeResponseAtom);
+
+    const user = useRecoilValue(UserAtom);
 
     const onClickRun = async () => {
         try {
@@ -98,6 +103,32 @@ export const CodeSection = () => {
         );
         navigator.clipboard.writeText(selectedFile[0].code);
     };
+    const onDeleteFile = async () => {
+        const selectedFile = files.filter(
+            (file: FileType) => file.id == selectedFileId
+        );
+        try {
+            await axios.delete(
+                `${BACKEND_URL}/api/store/file/${selectedFile[0].id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                }
+            );
+
+            if (selectedFileId == selectedFile[0].id) {
+                setSelectedFileId("");
+            }
+            setFiles((files: FileType[]) => {
+                const updatedFiles = files.filter(
+                    (file: FileType) => file.id != selectedFile[0].id
+                );
+                localStorage.setItem("files", JSON.stringify(updatedFiles));
+                return updatedFiles;
+            });
+        } catch (ex) {}
+    };
 
     return (
         <div className="w-full h-full bg-primary flex flex-col border-x-4 border-secondary-light">
@@ -127,6 +158,14 @@ export const CodeSection = () => {
                                     className={
                                         "size-12 text-white cursor-pointer hover:bg-secondary-light p-3 rounded"
                                     }
+                                />
+                            </div>
+                            <div onClick={onReload} title="Delete File">
+                                <DeleteIcon
+                                    className={
+                                        "size-12 text-white cursor-pointer hover:bg-secondary-light p-3 rounded"
+                                    }
+                                    onClick={onDeleteFile}
                                 />
                             </div>
                         </div>
