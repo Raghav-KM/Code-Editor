@@ -81,13 +81,15 @@ export const CodeSection = () => {
     }, [loading, code_id]);
 
     const onReload = () => {
-        setFiles(
-            files.map((file: FileType) =>
+        setFiles(() => {
+            const updatedFiles = files.map((file: FileType) =>
                 file.id == selectedFileId
                     ? { ...file, code: "", saved: false }
                     : file
-            )
-        );
+            );
+            localStorage.setItem("files", JSON.stringify(updatedFiles));
+            return updatedFiles;
+        });
         setClearCode((c) => c + 1);
     };
     const onCopy = () => {
