@@ -66,7 +66,7 @@ This project is a code editor built using React.js for the frontend and Express.
     cd frontend
     npm run dev
     ```
-3. Open your browser and navigate to `http://localhost:3000`.
+3. Open your browser and navigate to `http://localhost:5173`.
 
 ## Screenshots
 
