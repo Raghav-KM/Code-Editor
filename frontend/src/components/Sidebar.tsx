@@ -17,6 +17,7 @@ import { TickIcon } from "../assets/icons/TickIcon";
 import { CircularLoader } from "../assets/icons/CircularLoader";
 import axios from "axios";
 import { BACKEND_URL } from "./CodeSection";
+import { myToast } from "../utils/toast";
 
 export const Sidebar = () => {
     const [isSidebarCollapsed, setCollapseSidebar] =
@@ -48,7 +49,7 @@ export const Sidebar = () => {
                 })
             );
         } catch (ex) {
-            alert("Err!");
+            myToast({ type: "success", label: "Err!" });
         } finally {
             setUploading(false);
             localStorage.removeItem("files");

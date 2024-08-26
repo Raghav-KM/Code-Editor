@@ -12,6 +12,7 @@ import {
     UserLoggedInAtom,
 } from "../store/atoms/atoms";
 import { jwtDecode } from "jwt-decode";
+import { myToast } from "../utils/toast";
 
 export const LoginSection = () => {
     const [collapsed, setCollapsed] = useState(true);
@@ -94,10 +95,10 @@ export const LoginSection = () => {
                     });
                 });
             console.log(user);
-            alert("Login Successfull");
+            myToast({ type: "success", label: "Login Successfull!" });
         } catch (ex) {
             console.log(ex);
-            alert("Login Failed!!");
+            myToast({ type: "error", label: "Login Failed!" });
         } finally {
             setLoading(false);
         }

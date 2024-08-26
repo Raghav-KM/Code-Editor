@@ -18,6 +18,7 @@ import axios from "axios";
 import { CopyIcon } from "../assets/icons/CopyIcon";
 import { ReloadIcon } from "../assets/icons/ReloadIcon";
 import { DeleteIcon } from "../assets/icons/DeleteIcon";
+import { myToast } from "../utils/toast";
 
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL as String;
 
@@ -54,7 +55,7 @@ export const CodeSection = () => {
             setCodeId(response.data.code_id);
             setLoading(true);
         } catch (ex) {
-            alert("Code Execution Failed!");
+            myToast({ type: "error", label: "Code Execution Failed!" });
         } finally {
         }
     };
@@ -78,7 +79,7 @@ export const CodeSection = () => {
                     }
                 } catch (ex) {
                     console.log(ex);
-                    alert("Error!");
+                    myToast({ type: "error", label: "Error!" });
                     setLoading(false);
                 }
             }, 1500);

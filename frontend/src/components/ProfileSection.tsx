@@ -4,6 +4,7 @@ import { ChevronUpIcon } from "../assets/icons/ChevronUpIcon";
 import { LoaderButton } from "./LoaderButton";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { FilesAtom, UserAtom, UserLoggedInAtom } from "../store/atoms/atoms";
+import { myToast } from "../utils/toast";
 
 export const ProfileSection = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -17,7 +18,7 @@ export const ProfileSection = () => {
         setLoading(true);
 
         setTimeout(() => {
-            alert("Logout Successfull");
+            myToast({ type: "success", label: "Logout Successfull!" });
             setLoading(false);
             setUser({
                 userId: "",
