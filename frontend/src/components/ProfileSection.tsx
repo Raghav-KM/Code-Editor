@@ -3,13 +3,15 @@ import { ChevronDownIcon } from "../assets/icons/ChevronDownIcon";
 import { ChevronUpIcon } from "../assets/icons/ChevronUpIcon";
 import { LoaderButton } from "./LoaderButton";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { UserAtom, UserLoggedInAtom } from "../store/atoms/atoms";
+import { FilesAtom, UserAtom, UserLoggedInAtom } from "../store/atoms/atoms";
 
 export const ProfileSection = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useRecoilState(UserAtom);
     const setLoggedIn = useSetRecoilState(UserLoggedInAtom);
+
+    const setFiles = useSetRecoilState(FilesAtom);
 
     const onLogout = () => {
         setLoading(true);
@@ -25,6 +27,31 @@ export const ProfileSection = () => {
             });
             localStorage.removeItem("jwt-token");
             localStorage.removeItem("files");
+
+            setFiles([
+                {
+                    id: "xxxx-xxxx-xxxx-xxxx",
+                    code: `function print_alpha(){
+        for(let i:int = 0;i<26;i=i+1){
+            let c:char = 'a'+i;
+            dbg c;
+            dbg ' ';
+        }
+    }
+    let N:int = 10;
+    for(let i:int=0;i<N;i=i+1){
+        dbg i;
+        dbg ':';
+        dbg ' ';
+        call print_alpha();
+        if(i!=N-1){
+             dbg endl;
+        }
+    }`,
+                    saved: false,
+                    fileName: "TestFile.dc",
+                },
+            ]);
 
             setLoggedIn(false);
         }, 1000);

@@ -65,6 +65,7 @@ export const LoginSection = () => {
                     const uploadedFiles = response.data.files;
 
                     setFiles((files: FileType[]) => {
+                        /*
                         let updatedfiles = files;
                         console.log(uploadedFiles);
 
@@ -87,6 +88,9 @@ export const LoginSection = () => {
                         );
                         console.log(updatedfiles);
                         return updatedfiles;
+                        */
+                        console.log(files);
+                        return uploadedFiles;
                     });
                 });
             console.log(user);
