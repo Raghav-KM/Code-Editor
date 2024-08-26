@@ -22,45 +22,103 @@ This project is a code editor built using React.js for the frontend and Express.
 -   Express.js
 -   TypeScript
 -   Zod (for type validation)
+-   Prisma (ORM)
 
 ## Installation
 
 ### Prerequisites
 
--   Node.js
 -   Git
+-   Node.js
+-   NASM
+-   Docker (Optional)
 
 ### Steps
 
 1. Clone the repository:
+
     ```bash
     git clone https://github.com/Raghav-KM/code-editor.git
     ```
+
 2. Navigate to the project directory:
+
     ```bash
     cd code-editor
     ```
-3. Install dependencies for both frontend:
+
+3. Set up frontend :
 
     ```bash
     cd frontend
     npm install
     ```
 
-4. Install dependencies for both backend:
+4. Set up backend :
+
+    1. Locally :
+
+        ```bash
+        cd backend
+
+        mkdir input-code
+        mkdir asm-code
+
+        npm install
+        npx prisma generate
+        ```
+
+    2. Using Docker :
+
+        ```bash
+        cd backend
+
+        docker build -t code-editor-backend .
+        ```
+
+5. Set up Environment Variables
+
+    1. Frontend
+
+    ```bash
+    cd frontend
+
+    // create .env file with the following variable
+
+    BACKEND_URL = https://localhost:3000
+    ```
+
+    2. Backend
+
     ```bash
     cd backend
-    npm install
+
+    // create .env file with the following variable
+
+    DATABASE_URL = <DATABASE_URL>
     ```
 
 ## Usage
 
 1. Start the backend server:
-    ```bash
-    cd backend
-    tsc -b
-    node dist/index.js
-    ```
+
+    1. Locally :
+
+        ```bash
+        cd backend
+
+        tsc -b
+        node dist/index.js
+        ```
+
+    2. Using Docker :
+
+        ```bash
+        cd backend
+
+        docker run -p 3000:3000 --env-file ./.env code-editor-backend
+        ```
+
 2. Start the frontend development server:
     ```bash
     cd frontend
@@ -71,3 +129,7 @@ This project is a code editor built using React.js for the frontend and Express.
 ## Screenshots
 
 ![alt text](<Screenshot from 2024-08-14 18-33-20.png>)
+
+```
+
+```
