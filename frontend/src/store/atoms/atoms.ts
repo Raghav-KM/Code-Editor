@@ -23,32 +23,32 @@ export type CodeResponseType = {
     };
 };
 
-export const FilesAtom = atom<FileType[]>({
-    key: "FilesAtom",
-    default: [
-        {
-            id: "xxxx-xxxx-xxxx-xxxx",
-            code: `function print_alpha(){
-	for(let i:int = 0;i<26;i=i+1){
-		let c:char = 'a'+i;
-		dbg c;
-		dbg ' ';
-	}
+export const testFile: FileType = {
+    id: "xxxx-xxxx-xxxx-xxxx",
+    code: `function print_alpha(){
+    for(let i:int = 0;i<26;i=i+1){
+        let c:char = 'a'+i;
+        dbg c;
+        dbg ' ';
+    }
 }
 let N:int = 10;
 for(let i:int=0;i<N;i=i+1){
-	dbg i;
-	dbg ':';
-	dbg ' ';
-	call print_alpha();
-	if(i!=N-1){
- 		dbg endl;
-	}
+    dbg i;
+    dbg ':';
+    dbg ' ';
+    call print_alpha();
+    if(i!=N-1){
+        dbg endl;
+    }
 }`,
-            saved: false,
-            fileName: "TestFile.dc",
-        },
-    ],
+    saved: false,
+    fileName: "TestFile.dc",
+};
+
+export const FilesAtom = atom<FileType[]>({
+    key: "FilesAtom",
+    default: [testFile],
 });
 
 export const SelectedFileIdAtom = atom<string>({

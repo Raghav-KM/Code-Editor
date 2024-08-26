@@ -81,7 +81,7 @@ const CollapsedSidebar = ({
     const filesUploaded = useRecoilValue(FilesUploadedSelector);
 
     return (
-        <div className="flex flex-col">
+        <div className="w-full items-end flex flex-col me-4">
             <div className=" w-fit h-fit">
                 <BarsIcon
                     className={
@@ -176,7 +176,7 @@ const MaximizedSidebar = ({
                 />
             </div>
 
-            <div className="w-full max-h-[90vh] flex-grow flex flex-col gap-4 overflow-y-auto scrollbar-thin scrollbar-thumb-secondary-light scrollbar-track-transparent">
+            <div className="w-full max-h-[90vh] flex-grow flex flex-col gap-4 overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-secondary-light scrollbar-track-transparent">
                 <div className="px-4 p-2">
                     {loggedIn ? <ProfileSection /> : <LoginSection />}
                 </div>

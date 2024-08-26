@@ -8,12 +8,12 @@ export const SnippetsSection = () => {
     return (
         <div className="bg-primary w-full h-full flex flex-col gap-3">
             <div
-                className="w-full min-w-[20vh] flex flex-row justify-between items-center shadow-lg overflow-x-clip text-white font-mono font-bold text-lg p-4 px-6 bg-secondary-light rounded-lg cursor-pointer hover:opacity-85"
+                className="w-full min-w-[20vh] flex flex-row justify-between items-center shadow-lg text-white font-mono font-bold text-lg p-4 px-6 bg-secondary-light rounded-lg cursor-pointer hover:opacity-85 text-nowrap"
                 onClick={() => {
                     setCollapsed((c) => !c);
                 }}
             >
-                Code Snippets
+                Docs
                 {collapsed ? (
                     <ChevronDownIcon className="size-7 text-white " />
                 ) : (
