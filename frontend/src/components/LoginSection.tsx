@@ -107,7 +107,7 @@ export const LoginSection = () => {
     return (
         <div className=" w-full h-full flex flex-col gap-3">
             <div
-                className="w-full min-w-[20vh] flex flex-row justify-between items-center overflow-x-clip text-white font-mono font-bold text-lg p-4 px-6 bg-secondary-light rounded-lg cursor-pointer hover:opacity-85"
+                className="w-full min-w-[20vh] flex flex-row justify-between items-center shadow-lg overflow-x-clip text-white font-mono font-bold text-lg p-4 px-6 bg-secondary-light rounded-lg cursor-pointer hover:opacity-85"
                 onClick={() => {
                     setCollapsed((c) => !c);
                 }}
@@ -122,7 +122,7 @@ export const LoginSection = () => {
             {collapsed ? (
                 ""
             ) : (
-                <div className="w-full flex-grow flex max-h-[60vh] flex-col gap-4 overflow-x-hidden overflow-y-auto scrollbar scrollbar-thumb-secondary-light scrollbar-track-transparent px-4">
+                <div className="w-full flex-grow flex max-h-[60vh] flex-col gap-4 overflow-x-hidden overflow-y-auto scrollbar scrollbar-thumb-secondary-light scrollbar-track-transparent">
                     <div className="flex flex-row gap-2 items-center justify-around">
                         <div className="min-w-20 text-white font-semibold text-md ">
                             UserName

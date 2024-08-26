@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { BarsIcon } from "../assets/icons/BarsIcon";
 import {
     CollapseSidebarAtom,
@@ -20,13 +20,8 @@ import { BACKEND_URL } from "./CodeSection";
 import { myToast } from "../utils/toast";
 
 export const Sidebar = () => {
-    const [isSidebarCollapsed, setCollapseSidebar] =
-        useRecoilState(CollapseSidebarAtom);
-
+    const isSidebarCollapsed = useRecoilValue(CollapseSidebarAtom);
     const [files, setFiles] = useRecoilState(FilesAtom);
-
-    const loggedIn = useRecoilValue(UserLoggedInAtom);
-    const filesUploaded = useRecoilValue(FilesUploadedSelector);
     const [uploading, setUploading] = useState(false);
 
     const uploadFiles = async () => {
@@ -57,101 +52,138 @@ export const Sidebar = () => {
     };
 
     return (
-        <div className="bg-primary w-full h-full flex flex-col justify-between gap-2 pt-2">
-            <div className={`w-full h-fit flex items-center justify-end p-2`}>
-                {isSidebarCollapsed ? (
-                    <div className="flex flex-col">
-                        <div className=" w-fit h-fit">
-                            <BarsIcon
+        <div className="bg-primary w-full h-full flex flex-col items-center gap-2 pt-4">
+            {isSidebarCollapsed ? (
+                <CollapsedSidebar
+                    uploadFiles={uploadFiles}
+                    uploading={uploading}
+                />
+            ) : (
+                <MaximizedSidebar
+                    uploadFiles={uploadFiles}
+                    uploading={uploading}
+                />
+            )}
+        </div>
+    );
+};
+
+const CollapsedSidebar = ({
+    uploadFiles,
+    uploading,
+}: {
+    uploadFiles: () => void;
+    uploading: boolean;
+}) => {
+    const setCollapseSidebar = useSetRecoilState(CollapseSidebarAtom);
+
+    const loggedIn = useRecoilValue(UserLoggedInAtom);
+    const filesUploaded = useRecoilValue(FilesUploadedSelector);
+
+    return (
+        <div className="flex flex-col">
+            <div className=" w-fit h-fit">
+                <BarsIcon
+                    className={
+                        "size-11 hover:bg-secondary-light hover:cursor-pointer hover:shadow-md p-2 rounded-lg text-white mb-8"
+                    }
+                    onClick={() => {
+                        setCollapseSidebar((s) => !s);
+                    }}
+                />
+            </div>
+            {loggedIn ? (
+                <div>
+                    {!filesUploaded ? (
+                        uploading ? (
+                            <CircularLoader className="text-white size-10 p-2" />
+                        ) : (
+                            <Upload
                                 className={
-                                    "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white mb-8"
+                                    "size-11 hover:bg-secondary-light hover:cursor-pointer hover:shadow-md p-2 rounded-lg text-white"
                                 }
-                                onClick={() => {
-                                    setCollapseSidebar((s) => !s);
-                                }}
+                                onClick={uploadFiles}
                             />
-                        </div>
-                        {loggedIn ? (
-                            <div>
-                                {!filesUploaded ? (
-                                    uploading ? (
-                                        <CircularLoader className="text-white size-10 p-2" />
-                                    ) : (
-                                        <Upload
-                                            className={
-                                                "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
-                                            }
-                                            onClick={uploadFiles}
-                                        />
-                                    )
-                                ) : (
-                                    <TickIcon
-                                        className={
-                                            "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
-                                        }
-                                    />
-                                )}
+                        )
+                    ) : (
+                        <TickIcon
+                            className={
+                                "size-11 hover:bg-secondary-light hover:cursor-pointer hover:shadow-md p-2 rounded-lg text-white"
+                            }
+                        />
+                    )}
+                </div>
+            ) : (
+                ""
+            )}
+        </div>
+    );
+};
+
+const MaximizedSidebar = ({
+    uploadFiles,
+    uploading,
+}: {
+    uploadFiles: () => void;
+    uploading: boolean;
+}) => {
+    const setCollapseSidebar = useSetRecoilState(CollapseSidebarAtom);
+
+    const loggedIn = useRecoilValue(UserLoggedInAtom);
+    const filesUploaded = useRecoilValue(FilesUploadedSelector);
+
+    return (
+        <div className="w-full flex flex-col gap-4">
+            <div className="flex flex-row justify-between w-full px-4">
+                {loggedIn ? (
+                    !filesUploaded ? (
+                        uploading ? (
+                            <div className="text-white flex flex-row items-center ms-3 font-mono font-bold text-lg gap-2">
+                                Saving Changes
+                                <CircularLoader className="text-white size-11 p-2" />
                             </div>
                         ) : (
-                            ""
-                        )}
-                    </div>
+                            <div className="text-white flex flex-row items-center ms-3 font-mono font-bold text-lg gap-2">
+                                Save Changes?
+                                <Upload
+                                    className={
+                                        "size-11 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
+                                    }
+                                    onClick={uploadFiles}
+                                />
+                            </div>
+                        )
+                    ) : (
+                        <div className="text-white flex flex-row items-center ms-3 font-mono font-bold text-lg gap-2">
+                            Files Saved
+                            <TickIcon
+                                className={
+                                    "size-11 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
+                                }
+                            />
+                        </div>
+                    )
                 ) : (
-                    <div className="flex flex-row justify-between w-full">
-                        {loggedIn ? (
-                            !filesUploaded ? (
-                                uploading ? (
-                                    <div className="text-white flex flex-row items-center ms-3 font-mono font-bold text-lg gap-2">
-                                        Saving Changes
-                                        <CircularLoader className="text-white size-10 p-2" />
-                                    </div>
-                                ) : (
-                                    <div className="text-white flex flex-row items-center ms-3 font-mono font-bold text-lg gap-2">
-                                        Save Changes?
-                                        <Upload
-                                            className={
-                                                "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
-                                            }
-                                            onClick={uploadFiles}
-                                        />
-                                    </div>
-                                )
-                            ) : (
-                                <div className="text-white flex flex-row items-center ms-3 font-mono font-bold text-lg gap-2">
-                                    Files Saved
-                                    <TickIcon
-                                        className={
-                                            "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
-                                        }
-                                    />
-                                </div>
-                            )
-                        ) : (
-                            <div></div>
-                        )}
-                        <ChevronLeftIcons
-                            className={
-                                "size-10 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
-                            }
-                            onClick={() => {
-                                setCollapseSidebar((s) => !s);
-                            }}
-                        />
-                    </div>
+                    <div></div>
                 )}
+                <ChevronLeftIcons
+                    className={
+                        "size-11 hover:bg-secondary-light hover:cursor-pointer p-2 rounded-lg text-white"
+                    }
+                    onClick={() => {
+                        setCollapseSidebar((s) => !s);
+                    }}
+                />
             </div>
-            {isSidebarCollapsed ? (
-                ""
-            ) : (
-                <div className="w-full flex-grow flex flex-col gap-4 overflow-y-auto scrollbar scrollbar-thumb-secondary-light scrollbar-track-transparent">
-                    <div className="px-4 p-2">
-                        {loggedIn ? <ProfileSection /> : <LoginSection />}
-                    </div>
-                    <div className="px-4 p-2">
-                        <SnippetsSection />
-                    </div>
+
+            <div className="w-full max-h-[90vh] flex-grow flex flex-col gap-4 overflow-y-auto scrollbar-thin scrollbar-thumb-secondary-light scrollbar-track-transparent">
+                <div className="px-4 p-2">
+                    {loggedIn ? <ProfileSection /> : <LoginSection />}
                 </div>
-            )}
+                <div className="px-4 p-2">
+                    <SnippetsSection />
+                </div>
+            </div>
         </div>
     );
 };

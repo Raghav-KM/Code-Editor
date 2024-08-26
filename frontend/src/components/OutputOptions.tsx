@@ -10,11 +10,11 @@ export const OutputOptions = () => {
     return (
         <div className="w-full h-full flex flex-row justify-around items-center">
             <button
-                className={`min-w-52 w-[45%] p-3 h-fit rounded-xl flex justify-center items-center font-mono font-semibold cursor-pointer text-white ${
+                className={`min-w-56 w-[42%] p-4 h-fit rounded-xl flex justify-center items-center font-mono font-semibold cursor-pointer text-white ${
                     optionSelection == 1
                         ? "bg-secondary-light"
                         : "hover:bg-secondary-light"
-                } text-sm`}
+                } text-md`}
                 onClick={() => {
                     setOptionSelection(1);
                 }}
@@ -24,11 +24,11 @@ export const OutputOptions = () => {
             </button>
 
             <button
-                className={`min-w-52 w-[45%] p-3 h-fit rounded-xl flex justify-center items-center cursor-pointer font-mono font-semibold text-white ${
+                className={`min-w-54 w-[42%] p-4 h-fit rounded-xl flex justify-center items-center cursor-pointer font-mono font-semibold text-white ${
                     optionSelection == 2
                         ? "bg-secondary-light"
                         : "hover:bg-secondary-light"
-                } text-sm`}
+                } text-md`}
                 onClick={() => {
                     setOptionSelection(2);
                 }}
