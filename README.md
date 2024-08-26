@@ -34,7 +34,7 @@ This project is a code editor built using React.js for the frontend and Express.
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/code-editor.git
+    git clone https://github.com/Raghav-KM/code-editor.git
     ```
 2. Navigate to the project directory:
     ```bash
@@ -66,7 +66,7 @@ This project is a code editor built using React.js for the frontend and Express.
     cd frontend
     npm run dev
     ```
-3. Open your browser and navigate to `http://localhost:3000`.
+3. Open your browser and navigate to `http://localhost:5173`.
 
 ## Screenshots
 
