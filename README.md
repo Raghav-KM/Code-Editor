@@ -80,23 +80,23 @@ This project is a code editor built using React.js for the frontend and Express.
 
     1. Frontend
 
-    ```bash
-    cd frontend
+        ```bash
+        cd frontend
 
-    // create .env file with the following variable
+        // create .env file with the following variable
 
-    BACKEND_URL = https://localhost:3000
-    ```
+        BACKEND_URL = https://localhost:3000
+        ```
 
     2. Backend
 
-    ```bash
-    cd backend
+        ```bash
+        cd backend
 
-    // create .env file with the following variable
+        // create .env file with the following variable
 
-    DATABASE_URL = <DATABASE_URL>
-    ```
+        DATABASE_URL = <DATABASE_URL>
+        ```
 
 ## Usage
 
